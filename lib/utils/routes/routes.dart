@@ -3,6 +3,8 @@ import 'package:fundamakers/utils/routes/routes_name.dart';
 import 'package:fundamakers/view/app/auth/login_screen.dart';
 import 'package:fundamakers/view/app/auth/otp_screen.dart';
 import 'package:fundamakers/view/app/auth/register_screen.dart';
+import 'package:fundamakers/view/app/bottom_navigation_screen.dart';
+import 'package:fundamakers/view/app/profile/user_details_screen.dart';
 import 'package:fundamakers/view/splash_screen.dart';
 
 class Routers {
@@ -16,6 +18,10 @@ class Routers {
         return (context) => const RegisterScreen();
       case RoutesName.loginScreen:
         return (context) => const LoginScreen();
+      case RoutesName.bottomNavigationBar:
+        return (context) => const BottomNavigationPage();
+      case RoutesName.userDetailsScreen:
+        return (context) => const UserDetailsScreen();
       default:
         return (context) => const Scaffold(
               body: Center(

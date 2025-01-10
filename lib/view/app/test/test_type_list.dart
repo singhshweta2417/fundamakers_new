@@ -91,8 +91,6 @@ class _TestTypeMenuState extends State<TestTypeMenu> {
                            },
                          );
                        });
-                        print(testList[index].id);
-                        print('testList[index].id');
                       },
                       child: Container(
                         alignment: Alignment.center,

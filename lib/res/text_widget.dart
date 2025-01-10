@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fundamakers/main.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 Widget textWidget({
@@ -68,3 +69,11 @@ class Dimensions {
 }
 
 
+class SpaceHeight {
+  static Widget getZeroTwo(BuildContext context) {
+    return SizedBox(height: height * 0.02);
+  }
+  static Widget getZeroFive(BuildContext context) {
+    return SizedBox(height: height * 0.05);
+  }
+}

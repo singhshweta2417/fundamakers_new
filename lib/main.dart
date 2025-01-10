@@ -1,11 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fundamakers/providers/auth/login_providers.dart';
-import 'package:fundamakers/providers/auth/new_register_provider.dart';
-import 'package:fundamakers/providers/auth/otp_provider.dart';
-import 'package:fundamakers/providers/auth/otp_screen_new.dart';
-import 'package:fundamakers/providers/auth/registeration_provider.dart';
-import 'package:fundamakers/providers/auth/userview_provider.dart';
+import 'package:fundamakers/view_model/user_view_model.dart';
 import 'package:fundamakers/providers/course/course_provider.dart';
 import 'package:fundamakers/providers/course/sub_course_provider.dart';
 import 'package:fundamakers/providers/plans/plan_list_provider.dart';
@@ -23,6 +18,7 @@ import 'package:fundamakers/res/components/network.dart';
 import 'package:fundamakers/utils/routes/routes.dart';
 import 'package:fundamakers/utils/routes/routes_name.dart';
 import 'package:fundamakers/view/app/bottom_navigation_screen.dart';
+import 'package:fundamakers/view_model/auth_view_model.dart';
 import 'package:fundamakers/view_model/test_type_details_view_model.dart';
 import 'package:fundamakers/view_model/user_details_view_model.dart';
 import 'package:provider/provider.dart';
@@ -60,6 +56,7 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => UserViewModel()),
+        ChangeNotifierProvider(create: (context) => AuthenticationViewModel()),
         ChangeNotifierProvider(create: (context) => CourseProvider()),
         ChangeNotifierProvider(create: (context) => SubCourseProvider()),
         ChangeNotifierProvider(create: (context) => SubjectProvider()),
@@ -73,13 +70,8 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => HanOutsProvider()),
         ChangeNotifierProvider(create: (context) => PreviousYearProvider()),
         ChangeNotifierProvider(create: (context) => BSchoolInfoProvider()),
-        ChangeNotifierProvider(create: (context) => LoginProvider()),
-        ChangeNotifierProvider(create: (context) => OtpScreenProvider()),
-        ChangeNotifierProvider(create: (context) => RegistrationProvider()),
-        ChangeNotifierProvider(create: (context) => RegistrationNewProvider()),
         ChangeNotifierProvider(create: (context) => PracticeBookProvider()),
         ChangeNotifierProvider(create: (context) => TestTypeViewModel()),
-        ChangeNotifierProvider(create: (context) => OtpScreenNewProvider()),
         ChangeNotifierProvider(create: (context) => UserDetailViewModel()),
       ],
       child: Builder(

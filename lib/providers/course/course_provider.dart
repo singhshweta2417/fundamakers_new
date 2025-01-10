@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:fundamakers/models/auth/auth_model.dart';
 import 'package:fundamakers/models/course/course_model.dart';
-import 'package:fundamakers/providers/auth/userview_provider.dart';
+import 'package:fundamakers/view_model/user_view_model.dart';
 import 'package:fundamakers/res/app_url.dart';
 import 'package:http/http.dart' as http;
 
@@ -29,6 +29,7 @@ class CourseProvider with ChangeNotifier {
         },
       );
       if (response.statusCode == 200) {
+        print('jnbj');
         final Map<String, dynamic> jsonResponse = json.decode(response.body);
         final List<dynamic> jsonData = jsonResponse["data"];
         List<CourseModel> homeList = jsonData

@@ -25,12 +25,14 @@ class UserDetailViewModel with ChangeNotifier {
     _userDetailsResponse = shweta;
     notifyListeners();
   }
+
   setErrorUserModel(ErrorModel errorUser) {
     _errorResponse = errorUser;
     notifyListeners();
   }
 
-  Future<void> userDetailsApi(dynamic firstName, dynamic lastName, BuildContext context) async {
+  Future<void> userDetailsApi(
+      dynamic firstName, dynamic lastName, context) async {
     setUserDetailLoading(true);
     Map<String, dynamic> data = {
       "first_name": firstName,
@@ -42,7 +44,8 @@ class UserDetailViewModel with ChangeNotifier {
       setUserDetailLoading(false);
       final userDetails = UserDetailsModel.fromJson(value);
       setUserDetailsModel(userDetails);
-      ShowMessages.showSuccessSnackBar('User details retrieved successfully!', context);
+      ShowMessages.showSuccessSnackBar(
+          'User details retrieved successfully!', context);
     } catch (error) {
       setUserDetailLoading(false);
       try {
@@ -72,6 +75,7 @@ class UserDetailViewModel with ChangeNotifier {
       }
     }
   }
+
   Future<void> getUserDetailsApi(context) async {
     try {
       final value = await _userDetailRepo.getUserDetailsApi();

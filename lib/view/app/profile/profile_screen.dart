@@ -1,18 +1,19 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fundamakers/generated/assets.dart';
 import 'package:fundamakers/main.dart';
-import 'package:fundamakers/providers/auth/userview_provider.dart';
+import 'package:fundamakers/res/exit_pop_up.dart';
+import 'package:fundamakers/utils/routes/routes_name.dart';
+import 'package:fundamakers/view/app/profile/feedback_information/policies.dart';
+import 'package:fundamakers/view_model/user_details_view_model.dart';
+import 'package:fundamakers/view_model/user_view_model.dart';
 import 'package:fundamakers/res/app_colors.dart';
 import 'package:fundamakers/res/components/app_btn.dart';
 import 'package:fundamakers/view/app/auth/login_screen.dart';
-import 'package:fundamakers/view/app/profile/account_setting/edit_profile.dart';
 import 'package:fundamakers/view/app/profile/my_activity/liked_posts.dart';
 import 'package:fundamakers/view/app/profile/online_test_result.dart';
 import 'package:fundamakers/view/app/profile/order_history.dart';
-import 'package:fundamakers/view/app/profile/feedback_informationn/policies.dart';
 import 'package:fundamakers/view/app/profile/premium_features/gk_zone/gk_zone.dart';
 import 'package:fundamakers/view/app/profile/premium_features/library/library_screen.dart';
 import 'package:fundamakers/view/app/profile/premium_features/practice_book/practice_book.dart';
@@ -29,7 +30,28 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   bool isLoading = false;
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final viewProfile =
+      Provider.of<UserDetailViewModel>(context, listen: false);
+      viewProfile.getUserDetailsApi(context);
+      setData();
+    });
+  }
+
+  setData() {
+    Future.delayed(const Duration(seconds: 2), () {
+      if (!mounted) return;
+      final viewProfile =
+      Provider.of<UserDetailViewModel>(context, listen: false);
+      viewProfile.getUserDetailsApi(context);
+    });
+  }
+  @override
   Widget build(BuildContext context) {
+    final viewProfile =
+    Provider.of<UserDetailViewModel>(context).userDetailsResponse?.data;
     final List<ItemsModel> itemList = [
       ItemsModel(
         title: 'Online Test Result',
@@ -72,7 +94,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             SizedBox(
               height: height * 0.02,
             ),
-            Text('  Hey! Shweta Singh Chauhan',
+            Text('  Hey! ${viewProfile!=null?viewProfile.firstName:''}',
                 style: GoogleFonts.robotoCondensed(
                   textStyle: const TextStyle(
                       color: AppColors.textButtonColor,
@@ -123,10 +145,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             ListTile(
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const EditScreen()));
+                Navigator.pushNamed(context, RoutesName.userDetailsScreen);
               },
               leading: const ImageIcon(
                 AssetImage(Assets.imagesProfile),
@@ -382,19 +401,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
               width: width * 0.85,
               title: 'LogOut',
               onTap: () async {
-                setState(() {
-                  isLoading = true;
-                });
-                final userPref =
-                    Provider.of<UserViewModel>(context, listen: false);
-                userPref.remove();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                showBackDialog(
+                  message: 'Are You Sure want to logout?',
+                  context: context,
+                  yes: () {
+                    final userPref = Provider.of<UserViewModel>(context, listen: false);
+                    userPref.remove();
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      RoutesName.loginScreen,
+                          (Route<dynamic> route) => false,
+                    );
+                    HapticFeedback.vibrate();
+                  },
                 );
-                setState(() {
-                  isLoading = false;
-                });
               },
             ),
           ],

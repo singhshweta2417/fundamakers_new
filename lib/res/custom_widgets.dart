@@ -36,3 +36,11 @@ Widget paddingContainer({required child}){
    child: child
  );
 }
+
+Widget verticalBorder({Color?color}){
+  return Container(
+      height: height * 0.03,
+    width: 1.5,
+    color: color,
+  );
+}

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:fundamakers/generated/assets.dart';
-import 'package:fundamakers/providers/auth/otp_provider.dart';
+import 'package:fundamakers/main.dart';
 import 'package:fundamakers/res/app_colors.dart';
 import 'package:fundamakers/res/components/app_btn.dart';
 import 'package:fundamakers/res/custom_text_field.dart';
 import 'package:fundamakers/res/custom_widgets.dart';
 import 'package:fundamakers/res/text_widget.dart';
 import 'package:fundamakers/utils/routes/routes_name.dart';
+import 'package:fundamakers/view_model/auth_view_model.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -19,17 +20,11 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController phoneNo = TextEditingController();
-  TextEditingController passNo = TextEditingController();
 
   bool _isChecked = false;
-  String? _phoneError;
-
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    final otpScreenProvider = Provider.of<OtpScreenProvider>(context);
-    bool showPhoneErrorContainer = false;
+    final otpProvider = Provider.of<AuthenticationViewModel>(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Stack(
@@ -44,82 +39,41 @@ class _LoginScreenState extends State<LoginScreen> {
                   color: AppColors.lastButtonColor,
                   fontWeight: FontWeight.w400,
                   fontSize: Dimensions.twentyFour),
-              SizedBox(
-                height: height * 0.01,
-              ),
+              SpaceHeight.getZeroTwo(context),
               textWidget(
                   text:
                       'Welcome to FundaMakers Community.Enter your\nmobile number to register with us.',
                   fontWeight: FontWeight.w500,
                   fontSize: Dimensions.sixteen),
-              showPhoneErrorContainer == false
-                  ? Consumer<OtpScreenProvider>(
-                      builder: (context, otpScreenProvider, child) {
-                        return Visibility(
-                          visible: otpScreenProvider.errorMessage != null,
-                          child: Container(
-                            alignment: Alignment.center,
-                            height: height * 0.07,
-                            width: width,
-                            color: AppColors.lastButtonColor,
-                            child: Text(
-                              otpScreenProvider.errorMessage ?? 'Login Failed',
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        );
-                      },
-                    )
-                  : SizedBox(
-                      height: height * 0.08,
+              SpaceHeight.getZeroTwo(context),
+              customTextFormField(
+                isBottomBorderOnly: true,
+                keyboardType: TextInputType.number,
+                maxLength: 10,
+                controller: phoneNo,
+                hintText: 'Enter Mobile Number',
+                prefixIcon: Padding(
+                  padding: EdgeInsets.only(right: width * 0.02),
+                  child: SizedBox(
+                    width: width * 0.2,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Image(
+                          image: const AssetImage(Assets.imagesCountryFlag),
+                          width: width * 0.07,
+                        ),
+                        textWidget(text: '+91'),
+                        verticalBorder(color: Colors.black)
+                      ],
                     ),
-              SizedBox(
-                height: height * 0.02,
-              ),
-              Column(
-                children: [
-                  CustomTextField(
-                    keyboardType: TextInputType.number,
-                    maxLength: 10,
-                    controller: phoneNo,
-                    width: width * 0.8,
-                    hintText: 'Enter Mobile Number',
-                    borderSide: const BorderSide(color: Colors.transparent),
-                    border: const Border(
-                      bottom: BorderSide(width: 1, color: AppColors.blackColor),
-                    ),
-                    prefixIcon: Padding(
-                        padding: EdgeInsets.only(right: width * 0.02),
-                        child: SizedBox(
-                          width: width * 0.2,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Image(
-                                image:
-                                    const AssetImage(Assets.imagesCountryFlag),
-                                width: width * 0.06,
-                              ),
-                              textWidget(text: '+91'),
-                              const VerticalDivider(
-                                color: AppColors.blackColor,
-                                indent: 7,
-                                endIndent: 7,
-                              )
-                            ],
-                          ),
-                        )),
                   ),
-                  if (phoneNo.text.length != 10 && _phoneError != null)
-                    Text(
-                      _phoneError!.toString(),
-                      style: const TextStyle(color: Colors.red),
-                    ),
-                ],
+                ),
+                errorText: otpProvider.errorMessage?.isEmpty ?? true
+                    ? null
+                    : otpProvider.errorMessage,
               ),
-              SizedBox(
-                height: height * 0.02,
-              ),
+              SpaceHeight.getZeroTwo(context),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -166,9 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ],
               ),
-              SizedBox(
-                height: height * 0.02,
-              ),
+              SpaceHeight.getZeroTwo(context),
               Padding(
                 padding: EdgeInsets.only(left: width * 0.5),
                 child: InkWell(
@@ -181,18 +133,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       fontSize: Dimensions.thirteen),
                 ),
               ),
-              SizedBox(
-                height: height * 0.02,
-              ),
+              SpaceHeight.getZeroTwo(context),
               AppBtn(
-                loading: otpScreenProvider.loading,
+                loading: otpProvider.otpLoading,
                 onTap: () {
-                  if (phoneNo.text.isEmpty || phoneNo.text.length != 10) {
-                    setState(() {
-                      _phoneError =
-                          'Please enter a valid 10-digit phone number';
-                    });
-                  } else if (_isChecked == false) {
+                  if (_isChecked == false) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         backgroundColor: AppColors.greyColor,
@@ -201,8 +146,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     );
                   } else {
-                    _phoneError = null;
-                    otpScreenProvider.sendOtpOnPhone(context, phoneNo.text);
+                    otpProvider.otpLoading
+                        ? null
+                        : otpProvider.otpSentApi(
+                            phoneNo.text.toString(), context);
                   }
                 },
                 title: 'Login with OTP',

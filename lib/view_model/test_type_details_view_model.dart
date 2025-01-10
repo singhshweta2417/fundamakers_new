@@ -19,7 +19,6 @@ class TestTypeViewModel with ChangeNotifier {
   Future<void> testTypeDetailApi(dynamic data, context) async {
     try {
       final value = await _testTypeDetailsRepo.testTypeDetailApi(data);
-      print("API Response: $value");
       final testTypeDetails = TestTypeDetailsModel.fromJson(value);
       setTestTypeDetailsModel(testTypeDetails);
     } catch (error) {

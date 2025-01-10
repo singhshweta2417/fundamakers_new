@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fundamakers/main.dart';
-import 'package:fundamakers/providers/auth/otp_provider.dart';
 import 'package:fundamakers/res/app_colors.dart';
 import 'package:fundamakers/res/components/app_btn.dart';
 import 'package:fundamakers/res/custom_widgets.dart';
 import 'package:fundamakers/res/text_widget.dart';
+import 'package:fundamakers/view_model/auth_view_model.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 
@@ -16,7 +15,6 @@ class OtpScreen extends StatefulWidget {
 }
 
 class _OtpScreenState extends State<OtpScreen> {
-  OtpScreenProvider otpScreenProvider = OtpScreenProvider();
 
   final focusNode = FocusNode();
 
@@ -34,7 +32,6 @@ class _OtpScreenState extends State<OtpScreen> {
     final Map<String, dynamic> args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final String? phone = args['phone'];
-    bool showPhoneErrorContainer = false;
     final defaultPinTheme = PinTheme(
       width: 50,
       height: 64,
@@ -45,7 +42,7 @@ class _OtpScreenState extends State<OtpScreen> {
         borderRadius: BorderRadius.circular(8),
       ),
     );
-    final otpProvider = Provider.of<OtpScreenProvider>(context);
+    final otpProvider = Provider.of<AuthenticationViewModel>(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Stack(
@@ -60,36 +57,13 @@ class _OtpScreenState extends State<OtpScreen> {
                     color: AppColors.lastButtonColor,
                     fontWeight: FontWeight.w400,
                     fontSize: Dimensions.twentyFour),
-                SizedBox(
-                  height: height * 0.01,
-                ),
+                SpaceHeight.getZeroTwo(context),
                 textWidget(
                     text:
                         'Welcome to FundaMakers Community.Enter your mobile number to register with us.',
                     fontWeight: FontWeight.w500,
                     fontSize: Dimensions.sixteen),
-                showPhoneErrorContainer == false
-                    ? Consumer<OtpScreenProvider>(
-                        builder: (context, otpScreenProvider, child) {
-                          return Visibility(
-                            visible: otpScreenProvider.errorMessage != null,
-                            child: Container(
-                              alignment: Alignment.center,
-                              height: height * 0.07,
-                              width: width,
-                              color: AppColors.themeGreenColor,
-                              child: Text(
-                                otpScreenProvider.errorMessage ??
-                                    'Login Failed',
-                                style: const TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          );
-                        },
-                      )
-                    : SizedBox(
-                        height: height * 0.08,
-                      ),
+                SpaceHeight.getZeroTwo(context),
                 Center(
                   child: Pinput(
                     length: 4,
@@ -109,17 +83,30 @@ class _OtpScreenState extends State<OtpScreen> {
                     showCursor: true,
                   ),
                 ),
-                SizedBox(
-                  height: height * 0.02,
-                ),
+                otpProvider.verifyMessage != null
+                    ? Center(
+                        child: Consumer<AuthenticationViewModel>(
+                          builder: (context, otpProvider, child) {
+                            return Visibility(
+                                visible: otpProvider.verifyMessage != null,
+                                child: textWidget(
+                                    textAlign: TextAlign.center,
+                                    text: otpProvider.verifyMessage ??
+                                        'Login Failed',
+                                    fontSize: Dimensions.fifteen,
+                                    color: AppColors.lightRedColor,
+                                    fontWeight: FontWeight.w500));
+                          },
+                        ),
+                      )
+                    : Container(),
+                SpaceHeight.getZeroTwo(context),
                 textWidget(
                     text:
                         'Please enter 4 digit code we sent on your mobile number as SMS',
                     fontWeight: FontWeight.w400,
                     fontSize: Dimensions.sixteen),
-                SizedBox(
-                  height: height * 0.02,
-                ),
+                SpaceHeight.getZeroTwo(context),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -135,15 +122,13 @@ class _OtpScreenState extends State<OtpScreen> {
                         fontSize: Dimensions.sixteen)
                   ],
                 ),
-                SizedBox(
-                  height: height * 0.02,
-                ),
+                SpaceHeight.getZeroTwo(context),
                 AppBtn(
-                  loading: otpProvider.loading,
+                  loading: otpProvider.verifyLoading,
                   onTap: () {
+                    otpProvider.verifyOtpApi(
+                        phone.toString(), controller.text, context);
                     if (controller.text.isNotEmpty) {
-                      otpProvider.verifyOtp(
-                          context, phone.toString(), controller.text);
                     } else {}
                   },
                   title: 'Confirm and Continue',

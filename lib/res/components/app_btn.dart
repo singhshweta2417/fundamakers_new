@@ -67,7 +67,10 @@ class _AppBtnState extends State<AppBtn> with SingleTickerProviderStateMixin {
           return Center(
             child: Transform.scale(
               scale: _scaleAnimation.value,
-              child: Container(
+              child: widget.loading == true
+                  ?  const CircularProgressIndicator(
+                color: AppColors.gradientFirstColor,
+              ): Container(
                 height: widget.height??45,
                 width: widget.width ?? MediaQuery.of(context).size.width,
                 alignment: Alignment.center,
@@ -83,11 +86,7 @@ class _AppBtnState extends State<AppBtn> with SingleTickerProviderStateMixin {
                   ),
                   borderRadius: BorderRadius.circular(30.0),
                 ),
-                child: widget.loading == true
-                    ? const CircularProgressIndicator(
-                  color: Colors.white,
-                )
-                    : Text(
+                child:Text(
                   widget.title ?? 'Press me',
                   style: GoogleFonts.robotoCondensed(
                     textStyle: TextStyle(

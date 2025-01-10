@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:fundamakers/main.dart';
 import 'package:fundamakers/models/course/course_model.dart';
 import 'package:fundamakers/models/course/sub_course_model.dart';
-import 'package:fundamakers/providers/auth/new_register_provider.dart';
-import 'package:fundamakers/providers/auth/otp_screen_new.dart';
 import 'package:fundamakers/providers/course/course_provider.dart';
 import 'package:fundamakers/providers/course/sub_course_provider.dart';
 import 'package:fundamakers/res/app_colors.dart';
@@ -13,6 +11,7 @@ import 'package:fundamakers/res/components/app_btn.dart';
 import 'package:fundamakers/res/custom_text_field.dart';
 import 'package:fundamakers/res/custom_widgets.dart';
 import 'package:fundamakers/res/text_widget.dart';
+import 'package:fundamakers/view_model/auth_view_model.dart';
 import 'package:provider/provider.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -26,6 +25,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   SubCourseProvider subCourseProvider = SubCourseProvider();
   List<SubCourseModel> listTwo = [];
   bool isLoading = false;
+  bool isOtpVerified = false;
 
   Future<void> allSubCourseListData(String courseId) async {
     listTwo.clear();
@@ -85,19 +85,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController mobileNumber = TextEditingController();
   TextEditingController otpCon = TextEditingController();
 
-  late Timer _timer;
-  String? _emailError;
-  String? _firstNameError;
   bool isPhoneValid = false;
   bool isOtpValid = false;
   @override
   void initState() {
     super.initState();
-    _startTimer();
     allCourseListData();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<OtpScreenNewProvider>(context, listen: false).clear();
-    });
     mobileNumber.addListener(() {
       setState(() {
         isPhoneValid = mobileNumber.text.length == 10;
@@ -105,29 +98,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
     });
     otpCon.addListener(() {
       setState(() {
-        isOtpValid = otpCon.text.length == 10;
+        isOtpValid = otpCon.text.length == 4;
       });
     });
   }
 
-  void _startTimer() {
-    _timer = Timer(const Duration(seconds: 5), () {
-      setState(() {});
-    });
-  }
-
-  @override
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
-  }
-
-  OtpScreenNewProvider otpScreenNewProvider = OtpScreenNewProvider();
-
   @override
   Widget build(BuildContext context) {
-    final otpScreenNewProvider = Provider.of<OtpScreenNewProvider>(context);
-    final registerNewProvider = Provider.of<RegistrationNewProvider>(context);
+    final otpNewSent = Provider.of<AuthenticationViewModel>(context);
+    final registerNew = Provider.of<AuthenticationViewModel>(context);
     return Scaffold(
       backgroundColor: Colors.green,
       resizeToAvoidBottomInset: false,
@@ -144,83 +123,92 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     color: AppColors.lastButtonColor,
                     fontWeight: FontWeight.w400,
                     fontSize: Dimensions.twentyFour),
-                SizedBox(
-                  height: height * 0.01,
-                ),
+                SpaceHeight.getZeroTwo(context),
                 textWidget(
                     text:
                         'Welcome to FundaMakers Community.Enter your\nmobile number to register with us.',
                     fontWeight: FontWeight.w500,
                     fontSize: Dimensions.sixteen),
                 SizedBox(height: height * 0.02),
-                otpScreenNewProvider.randomBool
-                    ? const Text('')
-                    : textWidget(
-                        text: 'Please Verify Your Number Firstly',
-                        fontWeight: FontWeight.w500,
-                        fontSize: Dimensions.sixteen),
-                otpScreenNewProvider.randomBool
-                    ? CustomTextField(
-                        controller: otpCon,
-                        maxLength: 4,
-                        keyboardType: TextInputType.number,
-                        hintText: 'Verify Otp',
-                      )
-                    : CustomTextField(
-                        readOnly: otpScreenNewProvider.randomBool,
-                        controller: mobileNumber,
-                        maxLength: 10,
-                        keyboardType: TextInputType.phone,
-                        hintText: 'Mobile Number',
-                        prefixIcon:
-                            const Icon(Icons.phone_android_outlined, size: 20),
-                      ),
-
-                if (isPhoneValid)
+                if (isPhoneValid && !isOtpVerified)
+                  textWidget(
+                      text: 'Please Verify Your Number Firstly',
+                      fontWeight: FontWeight.w500,
+                      fontSize: Dimensions.sixteen),
+                customTextFormField(
+                  readOnly: isOtpVerified,
+                  controller: otpNewSent.setViewField ? otpCon : mobileNumber,
+                  maxLength: otpNewSent.setViewField ? 4 : 10,
+                  keyboardType: otpNewSent.setViewField
+                      ? TextInputType.number
+                      : TextInputType.phone,
+                  hintText:
+                      otpNewSent.setViewField ? 'Verify OTP' : 'Mobile Number',
+                  prefixIcon:
+                      const Icon(Icons.phone_android_outlined, size: 20),
+                  errorText: otpNewSent.setViewField
+                      ? otpNewSent.verifyNewMessage
+                      : otpNewSent.errorNewMessage,
+                ),
+                if (otpNewSent.setViewField)
                   TextButton(
                     onPressed: () {
-                      otpScreenNewProvider.sendOtpNewPhone(
-                          context, mobileNumber.text);
-                      isPhoneValid=false;
+                      otpNewSent.verifyNewOtpApi(
+                          mobileNumber.text, otpCon.text, context);
+                      setState(() {
+                        isOtpVerified = true;
+                      });
                     },
-                    child:
-                        const Text('Send OTP', style: TextStyle(fontSize: 15)),
+                    child: textWidget(
+                      text: 'Verify OTP',
+                      fontSize: Dimensions.fifteen,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.gradientFirstColor,
+                    ),
                   )
-                else if (isOtpValid)
+                else if (isPhoneValid && !isOtpVerified)
                   TextButton(
                     onPressed: () {
-                      otpScreenNewProvider.verifyNewOtp(
-                          context, mobileNumber.text, otpCon.text);
+                      otpNewSent.otpNewSentApi(mobileNumber.text, context);
                     },
-                    child: const Text('Verify OTP',
-                        style: TextStyle(fontSize: 15)),
-                  )
-                else
-                  Container(),
-                SizedBox(height: height * 0.02),
-                if (otpScreenNewProvider.verifyLoading == true)
+                    child: textWidget(
+                      text: 'Send OTP',
+                      fontSize: Dimensions.fifteen,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.gradientFirstColor,
+                    ),
+                  ),
+                SpaceHeight.getZeroTwo(context),
+                if (isOtpVerified)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      CustomTextField(
+                      SizedBox(
                         width: width * 0.43,
-                        controller: firstNameCon,
-                        keyboardType: TextInputType.name,
-                        prefixIcon: const Icon(Icons.person_outline, size: 20),
-                        hintText: 'First Name',
-                        errorText: _firstNameError,
+                        child: customTextFormField(
+                            controller: firstNameCon,
+                            keyboardType: TextInputType.name,
+                            prefixIcon:
+                                const Icon(Icons.person_outline, size: 20),
+                            hintText: 'First Name',
+                            errorText: registerNew.regMessage?.isEmpty ?? true
+                                ? null
+                                : registerNew.regMessage),
                       ),
-                      CustomTextField(
+                      SizedBox(
                         width: width * 0.43,
-                        controller: lastNameCon,
-                        keyboardType: TextInputType.name,
-                        prefixIcon: const Icon(Icons.person_outline, size: 20),
-                        hintText: 'Last Name',
+                        child: customTextFormField(
+                          controller: lastNameCon,
+                          keyboardType: TextInputType.name,
+                          prefixIcon:
+                              const Icon(Icons.person_outline, size: 20),
+                          hintText: 'Last Name',
+                        ),
                       )
                     ],
                   ),
-                SizedBox(height: height * 0.02),
-                if (otpScreenNewProvider.verifyLoading == true)
+                SpaceHeight.getZeroTwo(context),
+                if (isOtpVerified)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -294,52 +282,39 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     ],
                   ),
-                SizedBox(height: height * 0.02),
-                if (otpScreenNewProvider.verifyLoading == true)
+                SpaceHeight.getZeroTwo(context),
+                if (isOtpVerified)
                   SizedBox(
-                    height: _emailError != null ? height * 0.09 : height * 0.06,
                     child: TextField(
                       controller: emailCon,
                       keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.mail, size: 20),
-                        hintStyle: const TextStyle(
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.mail, size: 20),
+                        hintStyle: TextStyle(
                             fontSize: 13, fontWeight: FontWeight.w400),
                         hintText: 'Email Address',
-                        border: const OutlineInputBorder(),
-                        errorText: _emailError,
+                        border: OutlineInputBorder(),
+                        // errorText: _emailError,
                       ),
                     ),
                   ),
-                SizedBox(height: height * 0.02),
-                if (otpScreenNewProvider.verifyLoading == true)
+                SpaceHeight.getZeroTwo(context),
+                if (isOtpVerified)
                   AppBtn(
-                    loading: registerNewProvider.loading,
+                    loading: registerNew.regLoading,
                     onTap: () {
-                      if (mobileNumber.text.isEmpty &&
-                          mobileNumber.text.length != 10) {
-                        setState(() {});
-                      } else if (firstNameCon.text.isEmpty) {
-                        setState(() {
-                          _firstNameError = 'The first name field is required.';
-                          _emailError = null;
-                        });
-                      } else if (emailCon.text.isEmpty) {
-                        setState(() {
-                          _emailError = 'Please fill this field';
-                          _firstNameError = null;
-                        });
-                      } else {
-                        registerNewProvider.userNewRegister(
-                          context,
-                          emailCon.text,
-                          firstNameCon.text,
-                          mobileNumber.text,
-                          list.isNotEmpty ? list.first.id.toString() : '',
-                          listTwo.isNotEmpty ? listTwo.first.id.toString() : '',
-                          lastNameCon.text,
-                        );
-                      }
+                      registerNew.regLoading
+                          ? null
+                          : registerNew.registerApi(
+                              emailCon.text,
+                              firstNameCon.text,
+                              mobileNumber.text,
+                              list.isNotEmpty ? list.first.id.toString() : '',
+                              listTwo.isNotEmpty
+                                  ? listTwo.first.id.toString()
+                                  : '',
+                              lastNameCon.text,
+                              context);
                     },
                     title: 'Register',
                   ),

@@ -20,8 +20,6 @@ class _TestDetailsScreenState extends State<TestDetailsScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final testTypeDetails = Provider.of<TestTypeViewModel>(context, listen: false);
       testTypeDetails.testTypeDetailApi(widget.testId, context);
-      print(widget.testId);
-      print('widget.testId');
     });
   }
   @override

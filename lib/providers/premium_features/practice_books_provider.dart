@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:fundamakers/models/auth/auth_model.dart';
 import 'package:fundamakers/models/premium_features_model/practice_books_model.dart';
-import 'package:fundamakers/providers/auth/userview_provider.dart';
+import 'package:fundamakers/view_model/user_view_model.dart';
 import 'package:fundamakers/res/app_url.dart';
 import 'package:http/http.dart' as http;
 

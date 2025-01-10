@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:fundamakers/helper/app_exception.dart';
 import 'package:fundamakers/helper/network/base_api_services.dart';
 import 'package:fundamakers/models/auth/auth_model.dart';
-import 'package:fundamakers/providers/auth/userview_provider.dart';
+import 'package:fundamakers/view_model/user_view_model.dart';
 import 'package:http/http.dart' as http;
 
 class NetworkApiServices extends BaseApiServices {
@@ -77,8 +77,6 @@ class NetworkApiServices extends BaseApiServices {
     String userToken = authModel.token.toString();
     dynamic responseJson;
     try {
-      print(userToken);
-      print('userToken');
       final response = await http
           .post(Uri.parse(url),
           headers: {
@@ -113,8 +111,7 @@ class NetworkApiServices extends BaseApiServices {
         throw UnauthorisedException(response.body.toString());
       case 500:
       default:
-        throw FetchDataException(
-            'Error accrued while communicating with server with status code${response.statusCode}');
+        throw FetchDataException(response.body.toString());
     }
   }
 }

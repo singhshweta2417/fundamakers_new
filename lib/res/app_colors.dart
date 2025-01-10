@@ -11,4 +11,16 @@ class AppColors {
   static const gradientSecondColor = Color(0xFF4b6cb7);
   static const greyColor = Color(0xFF757575);
   static const blackColor = Color(0xFF000000);
+  static const LinearGradient gradientDisable = LinearGradient(
+    colors: [ AppColors.gradientSecondColor,
+      AppColors.gradientSecondColor],
+    tileMode: TileMode.clamp,
+    begin: Alignment.topRight,
+    end: Alignment.centerLeft,
+  );
+  static const RadialGradient radialGradient = RadialGradient(
+    colors: [gradientFirstColor, gradientSecondColor],
+    center: Alignment.center,
+    radius: 0.8,
+  );
 }
