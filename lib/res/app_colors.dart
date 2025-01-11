@@ -12,8 +12,8 @@ class AppColors {
   static const greyColor = Color(0xFF757575);
   static const blackColor = Color(0xFF000000);
   static const LinearGradient gradientDisable = LinearGradient(
-    colors: [ AppColors.gradientSecondColor,
-      AppColors.gradientSecondColor],
+    colors: [ AppColors.gradientFirstColor,
+      AppColors.gradientFirstColor],
     tileMode: TileMode.clamp,
     begin: Alignment.topRight,
     end: Alignment.centerLeft,

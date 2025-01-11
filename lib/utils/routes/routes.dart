@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:fundamakers/utils/routes/routes_name.dart';
-import 'package:fundamakers/view/app/auth/login_screen.dart';
-import 'package:fundamakers/view/app/auth/otp_screen.dart';
-import 'package:fundamakers/view/app/auth/register_screen.dart';
-import 'package:fundamakers/view/app/bottom_navigation_screen.dart';
-import 'package:fundamakers/view/app/profile/user_details_screen.dart';
+import 'package:fundamakers/view/auth/login_screen.dart';
+import 'package:fundamakers/view/auth/otp_screen.dart';
+import 'package:fundamakers/view/auth/register_screen.dart';
+import 'package:fundamakers/view/bottom_navigation_screen.dart';
+import 'package:fundamakers/view/home/course/menu_course.dart';
+import 'package:fundamakers/view/home/notifications.dart';
+import 'package:fundamakers/view/home/plans/plan_lists.dart';
+import 'package:fundamakers/view/my_course/intro_course_screen.dart';
+import 'package:fundamakers/view/my_course/my_course_video_list.dart';
+import 'package:fundamakers/view/profile/online_test_result.dart';
+import 'package:fundamakers/view/profile/user_details_screen.dart';
 import 'package:fundamakers/view/splash_screen.dart';
+import 'package:fundamakers/view/test/bottom_sheet_test_type.dart';
+import 'package:fundamakers/view/test/main_test_list.dart';
+import 'package:fundamakers/view/test/test_topic_menu.dart';
 
 class Routers {
   static WidgetBuilder generateRoute(String routeName) {
@@ -22,6 +31,24 @@ class Routers {
         return (context) => const BottomNavigationPage();
       case RoutesName.userDetailsScreen:
         return (context) => const UserDetailsScreen();
+      case RoutesName.notifications:
+        return (context) => const Notifications();
+      case RoutesName.menuCourse:
+        return (context) => const MenuCourse();
+      case RoutesName.planCourse:
+        return (context) => const PlanCourse();
+      case RoutesName.onlineTestResult:
+        return (context) => const OnlineTestResult();
+        case RoutesName.introCourseScreen:
+    return (context) => const IntroCourseScreen();
+      case RoutesName.myCourseVideoList:
+        return (context) => const MyCourseVideoList();
+      case RoutesName.subListMenu:
+        return (context) => const SubListMenu();
+      case RoutesName.mainTestList:
+        return (context) => const MainTestList();
+      case RoutesName.testDetailsScreen:
+        return (context) => const TestDetailsScreen();
       default:
         return (context) => const Scaffold(
               body: Center(

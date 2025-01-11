@@ -1,9 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fundamakers/models/auth/auth_model.dart';
+import 'package:fundamakers/utils/routes/routes_name.dart';
 import 'package:fundamakers/view_model/user_view_model.dart';
-import 'package:fundamakers/view/app/auth/login_screen.dart';
-import 'package:fundamakers/view/app/bottom_navigation_screen.dart';
 
 class SplashServices {
   //sharedPreferences get hua hai
@@ -16,10 +15,10 @@ class SplashServices {
       }
       if (value.token == null || value.token=='' ) {
         await Future.delayed(const Duration(seconds: 5));
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const LoginScreen()));
+        Navigator.pushReplacementNamed(context, RoutesName.loginScreen);
       } else {
         await Future.delayed(const Duration(seconds: 5));
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const BottomNavigationPage()));
+        Navigator.pushReplacementNamed(context, RoutesName.bottomNavigationBar);
       }
     }).onError((error, stackTrace) {
       if (kDebugMode) {

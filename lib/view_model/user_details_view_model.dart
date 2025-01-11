@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fundamakers/models/user_details_model.dart';
 import 'package:fundamakers/repo/update_profile_details_repo.dart';
@@ -82,6 +83,10 @@ class UserDetailViewModel with ChangeNotifier {
       setUserDetailLoading(false);
       final userDetails = UserDetailsModel.fromJson(value);
       setUserDetailsModel(userDetails);
-    } catch (error) {}
+    } catch (error) {
+      if (kDebugMode) {
+        print('error$error');
+      }
+    }
   }
 }

@@ -1,9 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:fundamakers/view_model/course_view_model.dart';
+import 'package:fundamakers/view_model/plans_view_model.dart';
 import 'package:fundamakers/view_model/user_view_model.dart';
-import 'package:fundamakers/providers/course/course_provider.dart';
-import 'package:fundamakers/providers/course/sub_course_provider.dart';
-import 'package:fundamakers/providers/plans/plan_list_provider.dart';
 import 'package:fundamakers/providers/premium_features/b_school_info_provider.dart';
 import 'package:fundamakers/providers/premium_features/gk_zone_provider.dart';
 import 'package:fundamakers/providers/premium_features/library_provider.dart';
@@ -11,13 +10,12 @@ import 'package:fundamakers/providers/premium_features/practice_books_provider.d
 import 'package:fundamakers/providers/premium_features/previous_years_provider.dart';
 import 'package:fundamakers/providers/subjects/subject_provider.dart';
 import 'package:fundamakers/providers/test/main_test_provider.dart';
-import 'package:fundamakers/providers/test/test_list_provider.dart';
 import 'package:fundamakers/providers/video_lectures/video_lecture_details_providers.dart';
 import 'package:fundamakers/res/app_constant.dart';
 import 'package:fundamakers/res/components/network.dart';
 import 'package:fundamakers/utils/routes/routes.dart';
 import 'package:fundamakers/utils/routes/routes_name.dart';
-import 'package:fundamakers/view/app/bottom_navigation_screen.dart';
+import 'package:fundamakers/view/bottom_navigation_screen.dart';
 import 'package:fundamakers/view_model/auth_view_model.dart';
 import 'package:fundamakers/view_model/test_type_details_view_model.dart';
 import 'package:fundamakers/view_model/user_details_view_model.dart';
@@ -56,13 +54,11 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => UserViewModel()),
+        ChangeNotifierProvider(create: (context) => CoursesViewModel()),
+        ChangeNotifierProvider(create: (context) => PlansViewModel()),
         ChangeNotifierProvider(create: (context) => AuthenticationViewModel()),
-        ChangeNotifierProvider(create: (context) => CourseProvider()),
-        ChangeNotifierProvider(create: (context) => SubCourseProvider()),
         ChangeNotifierProvider(create: (context) => SubjectProvider()),
-        ChangeNotifierProvider(create: (context) => TestListProvider()),
         ChangeNotifierProvider(create: (context) => MainTestListProvider()),
-        ChangeNotifierProvider(create: (context) => PlanListProvider()),
         ChangeNotifierProvider(create: (context) => GkZoneProvider()),
         ChangeNotifierProvider(create: (context) => VideoLectureProvider()),
         ChangeNotifierProvider(
