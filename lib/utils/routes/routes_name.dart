@@ -14,4 +14,10 @@ class RoutesName {
   static const subListMenu = '/sub_list_menu';
   static const mainTestList = '/main_test_list';
   static const testDetailsScreen = '/test_details_screen';
+  static const orderHistoryScreen = '/order_history_screen';
+  static const likedPostScreen = '/liked_post_screen';
+  static const classHandOutsScreen = '/class_hand_outs_screen';
+  static const onlineTest = '/online_test';
+  static const courseVideo = '/course_video';
+  static const onlineClassesList = '/online_classes_list';
 }

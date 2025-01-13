@@ -1,11 +1,11 @@
-class ClassHangOutsModel {
+class OnlineClassesModel {
   List<Data>? data;
   Links? links;
   Meta? meta;
 
-  ClassHangOutsModel({this.data, this.links, this.meta});
+  OnlineClassesModel({this.data, this.links, this.meta});
 
-  ClassHangOutsModel.fromJson(Map<String, dynamic> json) {
+  OnlineClassesModel.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null) {
       data = <Data>[];
       json['data'].forEach((v) {
@@ -33,45 +33,53 @@ class ClassHangOutsModel {
 
 class Data {
   int? id;
-  String? courseId;
-  int? subjectId;
+  String? title;
+  String? name;
+  String? faculty;
   String? description;
-  String? uniqueName;
-  String? fileName;
-  String? filePath;
-  dynamic host;
+  String? urlType;
+  String? url;
+  int? priority;
+  String? startTime;
+  String? endTime;
 
   Data(
       {this.id,
-      this.courseId,
-      this.subjectId,
-      this.description,
-      this.uniqueName,
-      this.fileName,
-      this.filePath,
-      this.host});
+        this.title,
+        this.name,
+        this.faculty,
+        this.description,
+        this.urlType,
+        this.url,
+        this.priority,
+        this.startTime,
+        this.endTime});
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    courseId = json['course_id'];
-    subjectId = json['subject_id'];
+    title = json['title'];
+    name = json['name'];
+    faculty = json['faculty'];
     description = json['description'];
-    uniqueName = json['unique_name'];
-    fileName = json['file_name'];
-    filePath = json['file_path'];
-    host = json['host'];
+    urlType = json['url_type'];
+    url = json['url'];
+    priority = json['priority'];
+    startTime = json['start_time'];
+    endTime = json['end_time'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
-    data['course_id'] = courseId;
-    data['subject_id'] = subjectId;
+    data['title'] = title;
+    data['name'] = name;
+    data['faculty'] = faculty;
     data['description'] = description;
-    data['unique_name'] = uniqueName;
-    data['file_name'] = fileName;
-    data['file_path'] = filePath;
-    data['host'] = host;
+    data['url_type'] = urlType;
+    data['url'] = url;
+    data['priority'] = priority;
+    data['start_time'] = startTime;
+    data['end_time'] = endTime;
     return data;
   }
 }
@@ -113,13 +121,13 @@ class Meta {
 
   Meta(
       {this.currentPage,
-      this.from,
-      this.lastPage,
-      this.links,
-      this.path,
-      this.perPage,
-      this.to,
-      this.total});
+        this.from,
+        this.lastPage,
+        this.links,
+        this.path,
+        this.perPage,
+        this.to,
+        this.total});
 
   Meta.fromJson(Map<String, dynamic> json) {
     currentPage = json['current_page'];

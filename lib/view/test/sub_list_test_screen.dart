@@ -3,21 +3,20 @@ import 'package:fundamakers/generated/assets.dart';
 import 'package:fundamakers/helper/response/status.dart';
 import 'package:fundamakers/main.dart';
 import 'package:fundamakers/res/app_colors.dart';
+import 'package:fundamakers/res/custom_widgets.dart';
 import 'package:fundamakers/res/text_widget.dart';
 import 'package:fundamakers/utils/routes/routes_name.dart';
 import 'package:fundamakers/view_model/subject_view_model.dart';
 import 'package:provider/provider.dart';
 
-class ClassHandOutsSubjectsScreen extends StatefulWidget {
-  const ClassHandOutsSubjectsScreen({Key? key}) : super(key: key);
+class SubListTestMenu extends StatefulWidget {
+  const SubListTestMenu({Key? key}) : super(key: key);
 
   @override
-  State<ClassHandOutsSubjectsScreen> createState() =>
-      _ClassHandOutsSubjectsScreenState();
+  State<SubListTestMenu> createState() => _SubListTestMenuState();
 }
 
-class _ClassHandOutsSubjectsScreenState
-    extends State<ClassHandOutsSubjectsScreen> {
+class _SubListTestMenuState extends State<SubListTestMenu> {
   @override
   void initState() {
     super.initState();
@@ -29,7 +28,6 @@ class _ClassHandOutsSubjectsScreenState
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -51,54 +49,27 @@ class _ClassHandOutsSubjectsScreenState
         body: Consumer<SubjectViewModel>(builder: (context, value, _) {
           switch (value.subjectResponse.success) {
             case Success.LOADING:
-              return Container(
-                height: height * 0.3,
-                width: width,
-                alignment: Alignment.center,
-                child: const CircularProgressIndicator(),
-              );
+              return circularProgressIndicator();
             case Success.ERROR:
-              return Container(
-                height: height * 0.3,
-                width: width,
-                alignment: Alignment.center,
-                child: const Image(image: AssetImage(Assets.imagesNoData)),
-              );
+              return noDataAvailable();
             case Success.COMPLETED:
               if (value.subjectResponse.data != null &&
                   value.subjectResponse.data!.data != null &&
                   value.subjectResponse.data!.data!.isNotEmpty) {
                 final subjectView = value.subjectResponse.data!.data!;
                 return ListView.builder(
+                  padding: EdgeInsets.only(top: height * 0.03),
                   physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   itemCount: subjectView.length,
                   itemBuilder: (context, index) {
                     return InkWell(
-                      onTap: () {
-                        Navigator.pushNamed(
-                            context, RoutesName.classHandOutsScreen);
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        padding: EdgeInsets.symmetric(
-                            horizontal: width * 0.03, vertical: height * 0.02),
-                        margin: EdgeInsets.symmetric(
-                            horizontal: width * 0.05, vertical: height * 0.02),
-                        decoration: BoxDecoration(
-                          color: AppColors.themeWhiteColor,
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              spreadRadius: 3,
-                              blurRadius: 7,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: Row(
+                        onTap: () {
+                          Navigator.pushNamed(context, RoutesName.mainTestList);
+                        },
+                        child: listContainer(
+                            child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             SizedBox(
@@ -136,24 +107,11 @@ class _ClassHandOutsSubjectsScreenState
                             ),
                             const Icon(Icons.arrow_forward_ios, size: 20),
                           ],
-                        ),
-                      ),
-                    );
+                        )));
                   },
                 );
               } else {
-                return Column(
-                  children: [
-                    Container(
-                      height: height * 0.5,
-                      width: width,
-                      alignment: Alignment.center,
-                      child:
-                          const Image(image: AssetImage(Assets.imagesNoData)),
-                    ),
-                    textWidget(text: 'No Data Available')
-                  ],
-                );
+                return noDataAvailable();
               }
           }
         }));

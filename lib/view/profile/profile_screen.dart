@@ -4,11 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:fundamakers/generated/assets.dart';
 import 'package:fundamakers/main.dart';
 import 'package:fundamakers/res/exit_pop_up.dart';
+import 'package:fundamakers/res/text_widget.dart';
 import 'package:fundamakers/utils/routes/routes_name.dart';
 import 'package:fundamakers/view/profile/feedback_information/policies.dart';
-import 'package:fundamakers/view/profile/my_activity/liked_posts.dart';
-import 'package:fundamakers/view/profile/online_test_result.dart';
-import 'package:fundamakers/view/profile/order_history.dart';
 import 'package:fundamakers/view/profile/premium_features/gk_zone/gk_zone.dart';
 import 'package:fundamakers/view/profile/premium_features/library/library_screen.dart';
 import 'package:fundamakers/view/profile/premium_features/practice_book/practice_book.dart';
@@ -57,20 +55,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
         title: 'Online Test Result',
         imageData: "",
         onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const OnlineTestResult()));
+          Navigator.pushNamed(context, RoutesName.onlineTestResult);
         },
       ),
       ItemsModel(
         title: 'Order History',
         imageData: "",
         onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const OrderHistoryScreen()));
+          Navigator.pushNamed(context, RoutesName.orderHistoryScreen);
         },
       ),
     ];
@@ -94,13 +86,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
             SizedBox(
               height: height * 0.02,
             ),
-            Text('  Hey! ${viewProfile != null ? viewProfile.firstName : ''}',
-                style: GoogleFonts.robotoCondensed(
-                  textStyle: const TextStyle(
-                      color: AppColors.textButtonColor,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600),
-                )),
+            textWidget(
+                text:
+                    '  Hey! ${viewProfile != null ? viewProfile.firstName : ''}',
+                fontSize: Dimensions.eighteen,
+                fontWeight: FontWeight.w600,
+                color: AppColors.textButtonColor),
             SizedBox(height: height * 0.01),
             GridView.count(
               shrinkWrap: true,
@@ -120,11 +111,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           const BorderRadius.all(Radius.circular(5.0)),
                     ),
                     alignment: Alignment.center,
-                    child: Text(data.title,
-                        style: GoogleFonts.robotoCondensed(
-                          textStyle: const TextStyle(
-                              fontWeight: FontWeight.w500, fontSize: 15),
-                        )),
+                    child: textWidget(
+                        text:
+                        data.title,
+                        fontSize: Dimensions.fifteen,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.textButtonColor),
                   ),
                 );
               }).toList(),
@@ -135,13 +127,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-              child: Text('Account Setting',
-                  style: GoogleFonts.robotoCondensed(
-                    textStyle: const TextStyle(
-                        color: AppColors.textButtonColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600),
-                  )),
+              child: textWidget(
+                  text:'Account Setting',
+                  fontSize: Dimensions.eighteen,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.textButtonColor),
             ),
             ListTile(
               onTap: () {
@@ -151,13 +141,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 AssetImage(Assets.imagesProfile),
                 color: AppColors.themeGreenColor,
               ),
-              title: Text('Edit Profile',
-                  style: GoogleFonts.robotoCondensed(
-                    textStyle: const TextStyle(
-                        color: AppColors.textButtonColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500),
-                  )),
+              title:textWidget(
+                  text:'Edit Profile',
+                  fontSize: Dimensions.fifteen,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.textButtonColor),
               trailing: const Icon(
                 Icons.arrow_forward_ios_sharp,
                 size: 13,
@@ -169,13 +157,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-              child: Text('My Activity',
-                  style: GoogleFonts.robotoCondensed(
-                    textStyle: const TextStyle(
-                        color: AppColors.textButtonColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600),
-                  )),
+              child:textWidget(
+                  text:'My Activity',
+                  fontSize: Dimensions.eighteen,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.textButtonColor),
             ),
             ListTile(
               leading: const ImageIcon(
@@ -183,20 +169,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 color: AppColors.themeGreenColor,
                 size: 22,
               ),
-              title: Text('Liked Posts',
-                  style: GoogleFonts.robotoCondensed(
-                    textStyle:
-                        const TextStyle(color: AppColors.textButtonColor),
-                  )),
+              title: textWidget(
+                  text:'Liked Posts',
+                  fontSize: Dimensions.fifteen,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.textButtonColor),
               trailing: const Icon(
                 Icons.arrow_forward_ios_sharp,
                 size: 13,
               ),
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const LikedPostScreen()));
+                Navigator.pushNamed(context, RoutesName.likedPostScreen);
               },
             ),
             Divider(
@@ -205,13 +188,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-              child: Text('Premium Features',
-                  style: GoogleFonts.robotoCondensed(
-                    textStyle: const TextStyle(
-                        color: AppColors.textButtonColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600),
-                  )),
+              child:textWidget(
+                  text:'Premium Features',
+                  fontSize: Dimensions.eighteen,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.textButtonColor),
             ),
             ListTile(
               leading: const ImageIcon(

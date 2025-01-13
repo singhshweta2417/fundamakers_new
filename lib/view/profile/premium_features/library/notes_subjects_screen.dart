@@ -8,16 +8,14 @@ import 'package:fundamakers/utils/routes/routes_name.dart';
 import 'package:fundamakers/view_model/subject_view_model.dart';
 import 'package:provider/provider.dart';
 
-class ClassHandOutsSubjectsScreen extends StatefulWidget {
-  const ClassHandOutsSubjectsScreen({Key? key}) : super(key: key);
+class NotesAndSubjectsScreen extends StatefulWidget {
+  const NotesAndSubjectsScreen({Key? key}) : super(key: key);
 
   @override
-  State<ClassHandOutsSubjectsScreen> createState() =>
-      _ClassHandOutsSubjectsScreenState();
+  State<NotesAndSubjectsScreen> createState() => _NotesAndSubjectsScreenState();
 }
 
-class _ClassHandOutsSubjectsScreenState
-    extends State<ClassHandOutsSubjectsScreen> {
+class _NotesAndSubjectsScreenState extends State<NotesAndSubjectsScreen> {
   @override
   void initState() {
     super.initState();

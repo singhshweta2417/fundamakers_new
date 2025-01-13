@@ -1,11 +1,10 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fundamakers/generated/assets.dart';
 import 'package:fundamakers/main.dart';
-import 'package:fundamakers/models/video_lecture/video_lecture_list_details_model.dart';
-import 'package:fundamakers/providers/video_lectures/video_lecture_details_providers.dart';
 import 'package:fundamakers/res/app_colors.dart';
+import 'package:fundamakers/view_model/video_view_model.dart';
+import 'package:provider/provider.dart';
 import 'package:vimeo_player_flutter/vimeo_player_flutter.dart';
 
 class CourseVideo extends StatefulWidget {
@@ -18,39 +17,26 @@ class CourseVideo extends StatefulWidget {
 }
 
 class _CourseVideoState extends State<CourseVideo> {
-  final VideoLectureDetailsProvider videoLectureDetailsProvider =
-  VideoLectureDetailsProvider();
-  bool isLoading = false;
- List<VideoLectureDetailsModel> videosList = [];
 
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
-    allVideoDetailsData();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final args =
+      ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+
+      if (args != null && args.containsKey('onlineID')) {
+        final onlineID = args['onlineID'];
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          final videoView =
+          Provider.of<VideoViewModel>(context, listen: false);
+          videoView.videoLecturesDetailsApi(onlineID, context);
+        });
+      }
+    });
   }
 
-  Future<void> allVideoDetailsData() async {
-    videosList.clear();
-    try {
-      setState(() {
-        isLoading = true;
-      });
-      List<VideoLectureDetailsModel> reviewsList =
-      await videoLectureDetailsProvider
-          .fetchVideoLectureDetailsData(widget.onlineID.toString());
-      setState(() {
-        videosList = reviewsList;
-        isLoading = false;
-      });
-    } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
-      if (kDebugMode) {
-        print('Error fetching subjects data: $e');
-      }
-    }
-  }
 
   String getVideoId(String videoUrl) {
     RegExp regExp = RegExp(r'vimeo\.com/(\d+)');
@@ -79,11 +65,7 @@ class _CourseVideoState extends State<CourseVideo> {
           ),
         ),
       ),
-      body: isLoading
-          ? const Center(
-        child: CircularProgressIndicator(),
-      )
-          :
+      body:
       Column(
         children: [
           ListView.builder(
@@ -95,7 +77,6 @@ class _CourseVideoState extends State<CourseVideo> {
                     return Container(
                       width: 150,
                       height: 200,
-                      color: Colors.red,
                       margin: EdgeInsets.only(
                         left: width * 0.05,
                         right: width * 0.05,

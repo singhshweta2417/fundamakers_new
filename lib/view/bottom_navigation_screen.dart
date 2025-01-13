@@ -96,7 +96,7 @@ class BottomNavigationPageState extends State<BottomNavigationPage> {
           const HomeScreen(),
 
           ///test menu
-          const TestTypeMenu(),
+          const TestTypeListScreen(),
 
           /// Community page
           const CommunityPostScreen(),

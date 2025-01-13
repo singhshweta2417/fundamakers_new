@@ -4,17 +4,23 @@ import 'package:fundamakers/view/auth/login_screen.dart';
 import 'package:fundamakers/view/auth/otp_screen.dart';
 import 'package:fundamakers/view/auth/register_screen.dart';
 import 'package:fundamakers/view/bottom_navigation_screen.dart';
+import 'package:fundamakers/view/home/course/course_video.dart';
 import 'package:fundamakers/view/home/course/menu_course.dart';
 import 'package:fundamakers/view/home/notifications.dart';
 import 'package:fundamakers/view/home/plans/plan_lists.dart';
 import 'package:fundamakers/view/my_course/intro_course_screen.dart';
 import 'package:fundamakers/view/my_course/my_course_video_list.dart';
+import 'package:fundamakers/view/profile/my_activity/liked_posts.dart';
+import 'package:fundamakers/view/profile/online_classes/online_classes_screen.dart';
 import 'package:fundamakers/view/profile/online_test_result.dart';
+import 'package:fundamakers/view/profile/order_history.dart';
+import 'package:fundamakers/view/profile/premium_features/library/class_handouts_subject/class_handouts_screen.dart';
 import 'package:fundamakers/view/profile/user_details_screen.dart';
 import 'package:fundamakers/view/splash_screen.dart';
 import 'package:fundamakers/view/test/bottom_sheet_test_type.dart';
-import 'package:fundamakers/view/test/main_test_list.dart';
-import 'package:fundamakers/view/test/test_topic_menu.dart';
+import 'package:fundamakers/view/test/online_test.dart';
+import 'package:fundamakers/view/test/test_list_screen.dart';
+import 'package:fundamakers/view/test/sub_list_test_screen.dart';
 
 class Routers {
   static WidgetBuilder generateRoute(String routeName) {
@@ -39,16 +45,28 @@ class Routers {
         return (context) => const PlanCourse();
       case RoutesName.onlineTestResult:
         return (context) => const OnlineTestResult();
-        case RoutesName.introCourseScreen:
-    return (context) => const IntroCourseScreen();
+      case RoutesName.introCourseScreen:
+        return (context) => const IntroCourseScreen();
       case RoutesName.myCourseVideoList:
         return (context) => const MyCourseVideoList();
       case RoutesName.subListMenu:
-        return (context) => const SubListMenu();
+        return (context) => const SubListTestMenu();
       case RoutesName.mainTestList:
-        return (context) => const MainTestList();
+        return (context) => const TestListScreen();
       case RoutesName.testDetailsScreen:
         return (context) => const TestDetailsScreen();
+      case RoutesName.orderHistoryScreen:
+        return (context) => const OrderHistoryScreen();
+      case RoutesName.likedPostScreen:
+        return (context) => const LikedPostScreen();
+      case RoutesName.classHandOutsScreen:
+        return (context) => const ClassHandOutsScreen();
+      case RoutesName.onlineTest:
+        return (context) => const OnlineTest();
+      case RoutesName.courseVideo:
+        return (context) => const CourseVideo();
+      case RoutesName.onlineClassesList:
+        return (context) => const OnlineClassesList();
       default:
         return (context) => const Scaffold(
               body: Center(

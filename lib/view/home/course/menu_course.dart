@@ -16,7 +16,6 @@ class MenuCourse extends StatefulWidget {
 }
 
 class _MenuCourseState extends State<MenuCourse> {
-  bool isLoading = false;
   @override
   void initState() {
     // TODO: implement initState

@@ -1,16 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fundamakers/view_model/course_view_model.dart';
+import 'package:fundamakers/view_model/online_classes_view_model.dart';
 import 'package:fundamakers/view_model/plans_view_model.dart';
+import 'package:fundamakers/view_model/premium_view_model.dart';
+import 'package:fundamakers/view_model/subject_view_model.dart';
 import 'package:fundamakers/view_model/user_view_model.dart';
-import 'package:fundamakers/providers/premium_features/b_school_info_provider.dart';
-import 'package:fundamakers/providers/premium_features/gk_zone_provider.dart';
-import 'package:fundamakers/providers/premium_features/library_provider.dart';
-import 'package:fundamakers/providers/premium_features/practice_books_provider.dart';
-import 'package:fundamakers/providers/premium_features/previous_years_provider.dart';
-import 'package:fundamakers/providers/subjects/subject_provider.dart';
-import 'package:fundamakers/providers/test/main_test_provider.dart';
-import 'package:fundamakers/providers/video_lectures/video_lecture_details_providers.dart';
 import 'package:fundamakers/res/app_constant.dart';
 import 'package:fundamakers/res/components/network.dart';
 import 'package:fundamakers/utils/routes/routes.dart';
@@ -19,13 +14,11 @@ import 'package:fundamakers/view/bottom_navigation_screen.dart';
 import 'package:fundamakers/view_model/auth_view_model.dart';
 import 'package:fundamakers/view_model/test_type_details_view_model.dart';
 import 'package:fundamakers/view_model/user_details_view_model.dart';
+import 'package:fundamakers/view_model/video_view_model.dart';
 import 'package:provider/provider.dart';
-import 'package:url_strategy/url_strategy.dart';
-import 'providers/video_lectures/video_lecture_list_provider.dart';
 
 void main() {
   runApp(const MyApp());
-  setPathUrlStrategy();
 }
 
 late Size mq;
@@ -47,6 +40,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     _networkChecker = NetworkChecker();
   }
+
   @override
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
@@ -54,21 +48,15 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => UserViewModel()),
+        ChangeNotifierProvider(create: (context) => AuthenticationViewModel()),
         ChangeNotifierProvider(create: (context) => CoursesViewModel()),
         ChangeNotifierProvider(create: (context) => PlansViewModel()),
-        ChangeNotifierProvider(create: (context) => AuthenticationViewModel()),
-        ChangeNotifierProvider(create: (context) => SubjectProvider()),
-        ChangeNotifierProvider(create: (context) => MainTestListProvider()),
-        ChangeNotifierProvider(create: (context) => GkZoneProvider()),
-        ChangeNotifierProvider(create: (context) => VideoLectureProvider()),
-        ChangeNotifierProvider(
-            create: (context) => VideoLectureDetailsProvider()),
-        ChangeNotifierProvider(create: (context) => HanOutsProvider()),
-        ChangeNotifierProvider(create: (context) => PreviousYearProvider()),
-        ChangeNotifierProvider(create: (context) => BSchoolInfoProvider()),
-        ChangeNotifierProvider(create: (context) => PracticeBookProvider()),
+        ChangeNotifierProvider(create: (context) => SubjectViewModel()),
+        ChangeNotifierProvider(create: (context) => PremiumViewModel()),
         ChangeNotifierProvider(create: (context) => TestTypeViewModel()),
         ChangeNotifierProvider(create: (context) => UserDetailViewModel()),
+        ChangeNotifierProvider(create: (context) => VideoViewModel()),
+        ChangeNotifierProvider(create: (context) => OnlineClassesViewModel()),
       ],
       child: Builder(
         builder: (context) {
@@ -104,7 +92,7 @@ class _MyAppState extends State<MyApp> {
                 }
                 return null;
               },
-              builder: (context, child)  {
+              builder: (context, child) {
                 return Stack(
                   children: [
                     child!,
@@ -113,7 +101,8 @@ class _MyAppState extends State<MyApp> {
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           final status = snapshot.data;
-                          if (status == NetworkStatus.noInternet || status == NetworkStatus.slowInternet) {
+                          if (status == NetworkStatus.noInternet ||
+                              status == NetworkStatus.slowInternet) {
                             return _buildNetworkStatusOverlay(status!);
                           }
                         }
@@ -148,24 +137,23 @@ class _MyAppState extends State<MyApp> {
         backgroundColor = Colors.transparent;
     }
 
-    return
-      Material(
-        color: Colors.transparent,
-        child: Container(
-          color: backgroundColor,
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.wifi_off, color: Colors.white),
-              const SizedBox(width: 10),
-              Text(
-                message,
-                style: const TextStyle(color: Colors.white, fontSize: 16),
-              ),
-            ],
-          ),
+    return Material(
+      color: Colors.transparent,
+      child: Container(
+        color: backgroundColor,
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.wifi_off, color: Colors.white),
+            const SizedBox(width: 10),
+            Text(
+              message,
+              style: const TextStyle(color: Colors.white, fontSize: 16),
+            ),
+          ],
         ),
-      );
+      ),
+    );
   }
 }

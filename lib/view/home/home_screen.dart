@@ -6,6 +6,7 @@ import 'package:fundamakers/res/app_colors.dart';
 import 'package:fundamakers/res/components/app_btn.dart';
 import 'package:fundamakers/res/text_widget.dart';
 import 'package:fundamakers/utils/routes/routes_name.dart';
+import 'package:fundamakers/view/bottom_navigation_screen.dart';
 import 'package:fundamakers/view_model/course_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -28,6 +29,22 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final List<ItemsModel> itemList = [
+      ItemsModel(
+        title: 'Online Classes',
+        imageData: "",
+        onTap: () {
+          Navigator.pushNamed(context, RoutesName.onlineClassesList);
+        },
+      ),
+      ItemsModel(
+        title: 'MY Courses',
+        imageData: "",
+        onTap: () {
+          NavigatorService.navigateToCourseScreen(context);
+        },
+      ),
+    ];
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -188,6 +205,45 @@ class _HomeScreenState extends State<HomeScreen> {
                       title: 'CAT Question Bank',
                     ),
                     SpaceHeight.getZeroTwo(context),
+                    GridView.count(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      childAspectRatio:4.5,
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 15),
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                      children: itemList.map((data) {
+                        return InkWell(
+                          onTap: data.onTap,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: AppColors.themeWhiteColor,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.2),
+                                  spreadRadius: 3,
+                                  blurRadius: 2,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
+                              border: Border.all(width: 0.1),
+                              borderRadius:
+                              const BorderRadius.all(Radius.circular(5.0)),
+                            ),
+                            alignment: Alignment.center,
+                            child: textWidget(
+                                text:
+                                data.title,
+                                fontSize: Dimensions.fifteen,
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.textButtonColor),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                    SpaceHeight.getZeroTwo(context),
+
                   ],
                 ),
               );
@@ -199,8 +255,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: height * 0.25,
                     width: width,
                     alignment: Alignment.center,
-                    child: const Image(
-                        image: AssetImage(Assets.imagesNoData)),
+                    child: const Image(image: AssetImage(Assets.imagesNoData)),
                   ),
                   textWidget(
                       text: 'No Data Available',
@@ -214,4 +269,11 @@ class _HomeScreenState extends State<HomeScreen> {
       }),
     );
   }
+}
+class ItemsModel {
+  final String title;
+  final String imageData;
+  final VoidCallback onTap;
+  ItemsModel(
+      {required this.title, required this.imageData, required this.onTap});
 }

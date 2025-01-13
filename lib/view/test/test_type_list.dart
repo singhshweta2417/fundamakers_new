@@ -3,21 +3,21 @@ import 'package:fundamakers/generated/assets.dart';
 import 'package:fundamakers/helper/response/status.dart';
 import 'package:fundamakers/main.dart';
 import 'package:fundamakers/res/app_colors.dart';
+import 'package:fundamakers/res/custom_widgets.dart';
 import 'package:fundamakers/res/text_widget.dart';
 import 'package:fundamakers/utils/routes/routes_name.dart';
 import 'package:fundamakers/view/test/bottom_sheet_test_type.dart';
 import 'package:fundamakers/view_model/test_type_details_view_model.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-class TestTypeMenu extends StatefulWidget {
-  const TestTypeMenu({Key? key}) : super(key: key);
+class TestTypeListScreen extends StatefulWidget {
+  const TestTypeListScreen({Key? key}) : super(key: key);
 
   @override
-  State<TestTypeMenu> createState() => _TestTypeMenuState();
+  State<TestTypeListScreen> createState() => _TestTypeListScreenState();
 }
 
-class _TestTypeMenuState extends State<TestTypeMenu> {
+class _TestTypeListScreenState extends State<TestTypeListScreen> {
   @override
   void initState() {
     super.initState();
@@ -45,130 +45,96 @@ class _TestTypeMenuState extends State<TestTypeMenu> {
       body: Consumer<TestTypeViewModel>(builder: (context, value, _) {
         switch (value.testListResponse.success) {
           case Success.LOADING:
-            return Container(
-              height: height * 0.3,
-              width: width,
-              alignment: Alignment.center,
-              child: const CircularProgressIndicator(),
-            );
+            return circularProgressIndicator();
           case Success.ERROR:
-            return Container(
-              height: height * 0.3,
-              width: width,
-              alignment: Alignment.center,
-              child: const Image(image: AssetImage(Assets.imagesNoData)),
-            );
+            return noDataAvailable();
           case Success.COMPLETED:
             if (value.testListResponse.data != null &&
                 value.testListResponse.data!.data != null &&
                 value.testListResponse.data!.data!.isNotEmpty) {
               final testListView = value.testListResponse.data!.data!;
               return ListView.builder(
+                  padding: EdgeInsets.only(top: height * 0.03),
                   physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   itemCount: testListView.length,
                   itemBuilder: (context, index) {
                     return InkWell(
-                      onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (bc) {
-                            return TestDetailsScreen(testId:testListView[index].id.toString());
-                          },
-                        );
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        margin: EdgeInsets.symmetric(
-                            horizontal: width * 0.05, vertical: 20),
-                        height: height * 0.15,
-                        decoration: BoxDecoration(
-                          color: AppColors.themeWhiteColor,
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              spreadRadius: 3,
-                              blurRadius: 7,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: Row(
+                        onTap: () {
+                          if (testListView[index].id == 12) {
+                            Navigator.pushNamed(
+                                context, RoutesName.subListMenu);
+                          } else {
+                            Navigator.pushNamed(
+                                context, RoutesName.mainTestList);
+                          }
+                        },
+                        child: listContainer(
+                            child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             SizedBox(
-                              height: height * 0.09,
-                              width: width * (width > 600 ? 0.2 : 0.3),
+                              height: height * 0.07,
                               child: const Image(
                                 image: AssetImage(Assets.imagesCommunity),
                               ),
                             ),
-                            SizedBox(
-                              width: width * (width > 600 ? 0.2 : 0.45),
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    testListView[index].name.toString(),
-                                    style: GoogleFonts.robotoCondensed(
-                                      textStyle: const TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 13,
-                                      ),
-                                    ),
-                                  ),
-                                  textWidget(
-                                      text:
-                                          'Test Available: ${testListView[index].totalSections.toString()}',
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: Dimensions.twelve),
-                                  textWidget(
-                                      text:
-                                          'Test taken: ${testListView[index].hasTimeLimit.toString()}',
-                                      fontWeight: FontWeight.w300,
-                                      fontSize: Dimensions.twelve),
-                                ],
-                              ),
+                            SizedBox(width: width * 0.03),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                textWidget(
+                                    text: testListView[index].name.toString(),
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: Dimensions.thirteen),
+                                textWidget(
+                                    text:
+                                        'Test Available: ${testListView[index].totalSections.toString()}',
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: Dimensions.twelve),
+                                textWidget(
+                                    text:
+                                        'Test taken: ${testListView[index].hasTimeLimit.toString()}',
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: Dimensions.twelve),
+                              ],
                             ),
-                            IconButton(
-                              onPressed: () {
-                                if (index == 0) {
-                                  Navigator.pushNamed(
-                                      context, RoutesName.subListMenu);
-                                } else {
-                                  Navigator.pushNamed(
-                                      context, RoutesName.mainTestList);
-                                }
-                              },
-                              icon: const Icon(Icons.arrow_forward_ios),
+                            const Spacer(),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    showModalBottomSheet(
+                                      context: context,
+                                      builder: (bc) {
+                                        return TestDetailsScreen(
+                                            testId: testListView[index]
+                                                .id
+                                                .toString());
+                                      },
+                                    );
+                                  },
+                                  icon: const Icon(
+                                    Icons.info_outline,
+                                    color: AppColors.gradientFirstColor,
+                                    size: 20,
+                                  ),
+                                ),
+                                const Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 20,
+                                ),
+                                SizedBox(height: height * 0.05)
+                              ],
                             )
                           ],
-                        ),
-                      ),
-                    );
+                        )));
                   });
             } else {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    height: height * 0.25,
-                    width: width,
-                    alignment: Alignment.center,
-                    child: const Image(image: AssetImage(Assets.imagesNoData)),
-                  ),
-                  textWidget(
-                      text: 'No Data Available',
-                      fontSize: Dimensions.eighteen,
-                      color: AppColors.textButtonColor,
-                      fontWeight: FontWeight.w500)
-                ],
-              );
+              return noDataAvailable();
             }
         }
       }),

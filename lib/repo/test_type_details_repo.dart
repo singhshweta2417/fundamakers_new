@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:fundamakers/helper/network/base_api_services.dart';
 import 'package:fundamakers/helper/network/network_api.dart';
 import 'package:fundamakers/models/test/test_list_model.dart';
+import 'package:fundamakers/models/test_model.dart';
 import 'package:fundamakers/models/test_type_details_model.dart';
 import 'package:fundamakers/res/app_url.dart';
 
@@ -9,7 +10,7 @@ class TestTypeDetailsRepository {
   final BaseApiServices _apiServices = NetworkApiServices();
 
   ///TEST-LISTS
-  Future<TestListModel> testListApi() async {
+  Future<TestListModel> testTypeListApi() async {
     try {
       dynamic response =
           await _apiServices.getGetApiBearerResponse(AppUrls.testTypeUrls);
@@ -31,6 +32,20 @@ class TestTypeDetailsRepository {
     } catch (e) {
       if (kDebugMode) {
         print('Error occurred during testTypeDetailApi: $e');
+      }
+      rethrow;
+    }
+  }
+
+  ///TEST
+  Future<TestModel> testApi() async {
+    try {
+      dynamic response =
+          await _apiServices.getGetApiBearerResponse(AppUrls.testsUrls);
+      return TestModel.fromJson(response);
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error occurred during testApi: $e');
       }
       rethrow;
     }

@@ -1,11 +1,13 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fundamakers/generated/assets.dart';
+import 'package:fundamakers/helper/response/status.dart';
 import 'package:fundamakers/main.dart';
-import 'package:fundamakers/models/video_lecture/video_lecture_model.dart';
-import 'package:fundamakers/providers/video_lectures/video_lecture_list_provider.dart';
 import 'package:fundamakers/res/app_colors.dart';
-import 'package:fundamakers/view/home/course/course_video.dart';
+import 'package:fundamakers/res/custom_widgets.dart';
+import 'package:fundamakers/res/text_widget.dart';
+import 'package:fundamakers/utils/routes/routes_name.dart';
+import 'package:fundamakers/view_model/video_view_model.dart';
+import 'package:provider/provider.dart';
 
 class MyCourseVideoList extends StatefulWidget {
   const MyCourseVideoList({Key? key}) : super(key: key);
@@ -15,105 +17,92 @@ class MyCourseVideoList extends StatefulWidget {
 }
 
 class _MyCourseVideoListState extends State<MyCourseVideoList> {
-
-  VideoLectureProvider videoLectureProvider = VideoLectureProvider();
-
-  Future<void> allVideoListData() async {
-    videos.clear();
-    try {
-      setState(() {
-        isLoading = true;
-      });
-      List<VideoLectureModel> reviewsList = await videoLectureProvider.fetchVideoLectureListData();
-      setState(() {
-        videos = reviewsList;
-        isLoading = false;
-      });
-    } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
-      if (kDebugMode) {
-        print('Error fetching subjects data: $e');
-      }
-    }
-  }
-
-  bool isLoading = false;
-  List<VideoLectureModel> videos = [];
-
-  // Future<String> _getThumbnailUrl(String videoUrl) async {
-  //   final response = await http.get(Uri.parse('https://vimeo.com/api/oembed.json?url=$videoUrl'));
-  //   print('https://vimeo.com/api/oembed.json?url=$videoUrl');
-  //   if (response.statusCode == 200) {
-  //     final Map<String, dynamic> responseData = json.decode(response.body);
-  //     return responseData['thumbnail_url'];
-  //   } else {
-  //     throw Exception('Failed to load thumbnail');
-  //   }
-  // }
-
   @override
   void initState() {
-    allVideoListData();
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final videoView = Provider.of<VideoViewModel>(context, listen: false);
+      videoView.videoLecturesApi(context);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        backgroundColor: AppColors.themeGreenColor,
-        title: SizedBox(
-          width: width * 0.4,
-          child: const Image(
-            image: AssetImage(Assets.logoFundamakers),
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          centerTitle: true,
+          backgroundColor: AppColors.themeGreenColor,
+          title: SizedBox(
+            width: width * 0.4,
+            child: const Image(
+              image: AssetImage(Assets.logoFundamakers),
+            ),
+          ),
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.arrow_back_ios),
           ),
         ),
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(Icons.arrow_back_ios),
-        ),
-      ),
-      body:
-      isLoading && videos.isEmpty?const Center(
-        child: CircularProgressIndicator(
-          color: AppColors.themeGreenColor,
-        ),
-      ): videos.isEmpty
-          ? const Center(
-        child: Text("No Data Available",style: TextStyle(color: Colors.black),),
-      ):
-      ListView.builder(
-        shrinkWrap: true,
-        itemCount: videos.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            leading: Container(
-                height: height * 0.08,
-                width: width * 0.28,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image:videos[index].thumbnailUrl!=null? AssetImage(videos[index].thumbnailUrl.toString()):
-                    const AssetImage(Assets.imagesSolution),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                child:const Icon(Icons.play_arrow,size: 30,color: Colors.green,)),
-            title: Text(videos[index].videoTitle.toString()),
-            subtitle:
-            Text(videos[index].description.toString()),
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context)=> CourseVideo(onlineID:videos[index].id,),));
-              //thumbnailUrl:videos[index].thumbnailUrl
-            },
-          );
-        },
-      ),
-    );
+        body: Consumer<VideoViewModel>(builder: (context, value, _) {
+          switch (value.videoLectureResponse.success) {
+            case Success.LOADING:
+              return circularProgressIndicator();
+            case Success.ERROR:
+              return noDataAvailable();
+            case Success.COMPLETED:
+              if (value.videoLectureResponse.data != null &&
+                  value.videoLectureResponse.data!.data != null &&
+                  value.videoLectureResponse.data!.data!.isNotEmpty) {
+                final videos = value.videoLectureResponse.data!.data!;
+                return ListView.builder(
+                  padding: EdgeInsets.only(top: height * 0.03),
+                  shrinkWrap: true,
+                  itemCount: videos.length,
+                  itemBuilder: (context, index) {
+                    return listContainer(
+                        child: ListTile(
+                      leading: Container(
+                          height: height * 0.1,
+                          width: width * 0.3,
+                          decoration: BoxDecoration(
+                            border: Border.all( color: Colors.black.withOpacity(0.2),),
+                            borderRadius: BorderRadius.circular(5),
+                            image: DecorationImage(
+                              image: videos[index].thumbnailUrl != null
+                                  ? AssetImage(
+                                      videos[index].thumbnailUrl.toString())
+                                  : const AssetImage(Assets.imagesSolution),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          child: const Icon(
+                            Icons.play_arrow,
+                            size: 30,
+                            color: Colors.green,
+                          )),
+                      title: textWidget(
+                          text: videos[index].videoTitle.toString(),
+                          fontWeight: FontWeight.w600,
+                          fontSize: Dimensions.fifteen),
+                      subtitle: textWidget(
+                          text: videos[index].description.toString(),
+                          fontWeight: FontWeight.w500,
+                          fontSize: Dimensions.thirteen,
+                          maxLines: 2),
+                      onTap: () {
+                        Navigator.pushNamed(context, RoutesName.courseVideo,arguments: {'onlineID':videos[index].id});
+                        //thumbnailUrl:videos[index].thumbnailUrl
+                      },
+                    ));
+                  },
+                );
+              } else {
+                return noDataAvailable();
+              }
+          }
+        }));
   }
 }

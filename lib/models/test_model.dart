@@ -1,11 +1,11 @@
-class ClassHangOutsModel {
+class TestModel {
   List<Data>? data;
   Links? links;
   Meta? meta;
 
-  ClassHangOutsModel({this.data, this.links, this.meta});
+  TestModel({this.data, this.links, this.meta});
 
-  ClassHangOutsModel.fromJson(Map<String, dynamic> json) {
+  TestModel.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null) {
       data = <Data>[];
       json['data'].forEach((v) {
@@ -33,45 +33,57 @@ class ClassHangOutsModel {
 
 class Data {
   int? id;
-  String? courseId;
-  int? subjectId;
+  int? courseId;
+  int? testTypeId;
+  String? name;
+  int? hasWindowTimeLimit;
+  String? fromDate;
+  String? toDate;
+  int? cutOffMarks;
+  int? status;
   String? description;
-  String? uniqueName;
-  String? fileName;
-  String? filePath;
-  dynamic host;
+  String? videoUrl;
 
   Data(
       {this.id,
-      this.courseId,
-      this.subjectId,
-      this.description,
-      this.uniqueName,
-      this.fileName,
-      this.filePath,
-      this.host});
+        this.courseId,
+        this.testTypeId,
+        this.name,
+        this.hasWindowTimeLimit,
+        this.fromDate,
+        this.toDate,
+        this.cutOffMarks,
+        this.status,
+        this.description,
+        this.videoUrl});
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     courseId = json['course_id'];
-    subjectId = json['subject_id'];
+    testTypeId = json['test_type_id'];
+    name = json['name'];
+    hasWindowTimeLimit = json['has_window_time_limit'];
+    fromDate = json['from_date'];
+    toDate = json['to_date'];
+    cutOffMarks = json['cut_off_marks'];
+    status = json['status'];
     description = json['description'];
-    uniqueName = json['unique_name'];
-    fileName = json['file_name'];
-    filePath = json['file_path'];
-    host = json['host'];
+    videoUrl = json['video_url'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['course_id'] = courseId;
-    data['subject_id'] = subjectId;
+    data['test_type_id'] = testTypeId;
+    data['name'] = name;
+    data['has_window_time_limit'] = hasWindowTimeLimit;
+    data['from_date'] = fromDate;
+    data['to_date'] = toDate;
+    data['cut_off_marks'] = cutOffMarks;
+    data['status'] = status;
     data['description'] = description;
-    data['unique_name'] = uniqueName;
-    data['file_name'] = fileName;
-    data['file_path'] = filePath;
-    data['host'] = host;
+    data['video_url'] = videoUrl;
     return data;
   }
 }
@@ -111,15 +123,7 @@ class Meta {
   int? to;
   int? total;
 
-  Meta(
-      {this.currentPage,
-      this.from,
-      this.lastPage,
-      this.links,
-      this.path,
-      this.perPage,
-      this.to,
-      this.total});
+  Meta({this.currentPage, this.from, this.lastPage, this.links, this.path, this.perPage, this.to, this.total});
 
   Meta.fromJson(Map<String, dynamic> json) {
     currentPage = json['current_page'];
@@ -174,3 +178,4 @@ class MetaLinks {
     return data;
   }
 }
+
