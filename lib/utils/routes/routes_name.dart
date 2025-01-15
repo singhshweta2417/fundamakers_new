@@ -20,4 +20,8 @@ class RoutesName {
   static const onlineTest = '/online_test';
   static const courseVideo = '/course_video';
   static const onlineClassesList = '/online_classes_list';
+  static const classHandOutsSubjectsScreen = '/class_hand_outs_subjects_screen';
+  static const previousYearsPaperScreen = '/previous_years_paper_screen';
+  static const bSchoolInfoScreen = '/b_school_info_screen';
+  static const notesAndSubjectsScreen = '/notes_and_subjects_screen';
 }

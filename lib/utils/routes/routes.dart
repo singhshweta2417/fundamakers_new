@@ -14,7 +14,11 @@ import 'package:fundamakers/view/profile/my_activity/liked_posts.dart';
 import 'package:fundamakers/view/profile/online_classes/online_classes_screen.dart';
 import 'package:fundamakers/view/profile/online_test_result.dart';
 import 'package:fundamakers/view/profile/order_history.dart';
+import 'package:fundamakers/view/profile/premium_features/library/b_school_info_screen.dart';
 import 'package:fundamakers/view/profile/premium_features/library/class_handouts_subject/class_handouts_screen.dart';
+import 'package:fundamakers/view/profile/premium_features/library/class_handouts_subject/class_handouts_subjects.dart';
+import 'package:fundamakers/view/profile/premium_features/library/notes_subjects_screen.dart';
+import 'package:fundamakers/view/profile/premium_features/library/previous_years_papers.dart';
 import 'package:fundamakers/view/profile/user_details_screen.dart';
 import 'package:fundamakers/view/splash_screen.dart';
 import 'package:fundamakers/view/test/bottom_sheet_test_type.dart';
@@ -67,6 +71,14 @@ class Routers {
         return (context) => const CourseVideo();
       case RoutesName.onlineClassesList:
         return (context) => const OnlineClassesList();
+      case RoutesName.classHandOutsSubjectsScreen:
+        return (context) => const ClassHandOutsSubjectsScreen();
+      case RoutesName.previousYearsPaperScreen:
+        return (context) => const PreviousYearsPaperScreen();
+      case RoutesName.bSchoolInfoScreen:
+        return (context) => const BSchoolInfoScreen();
+      case RoutesName.notesAndSubjectsScreen:
+        return (context) => const NotesAndSubjectsScreen();
       default:
         return (context) => const Scaffold(
               body: Center(

@@ -1,5 +1,3 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'package:flutter/material.dart';
 import 'package:fundamakers/generated/assets.dart';
 import 'package:fundamakers/main.dart';
@@ -10,10 +8,10 @@ class DailyTestScreen extends StatefulWidget {
   const DailyTestScreen({super.key});
 
   @override
-  _DailyTestScreenState createState() => _DailyTestScreenState();
+  DailyTestScreenState createState() => DailyTestScreenState();
 }
 
-class _DailyTestScreenState extends State<DailyTestScreen> {
+class DailyTestScreenState extends State<DailyTestScreen> {
   String selectedOption = "";
   String correctAnswer = "c";
   late PageController _pageController;
@@ -59,14 +57,14 @@ class _DailyTestScreenState extends State<DailyTestScreen> {
             ),
           ],
         ),
-        child: Text(
-          optionText,
-          style:GoogleFonts.robotoCondensed(textStyle:  const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w500,
-            fontSize: 17,
-          ),)
-        ),
+        child: Text(optionText,
+            style: GoogleFonts.robotoCondensed(
+              textStyle: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+                fontSize: 17,
+              ),
+            )),
       ),
     );
   }
@@ -135,7 +133,11 @@ class _DailyTestScreenState extends State<DailyTestScreen> {
                 },
               ),
             ),
-            Text('Result:5/10',style: GoogleFonts.robotoCondensed(textStyle: const TextStyle(fontWeight: FontWeight.w500,fontSize: 18),)),
+            Text('Result:5/10',
+                style: GoogleFonts.robotoCondensed(
+                  textStyle: const TextStyle(
+                      fontWeight: FontWeight.w500, fontSize: 18),
+                )),
             buildPageNumbers(),
           ],
         ),
@@ -150,11 +152,12 @@ class _DailyTestScreenState extends State<DailyTestScreen> {
         Container(
           alignment: Alignment.center,
           width: MediaQuery.of(context).size.width * 0.99,
-          child: Text(
-            'Which planet is known as the "Red Planet"?',
-            textAlign: TextAlign.center,
-            style:GoogleFonts.robotoCondensed(textStyle:  const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),)
-          ),
+          child: Text('Which planet is known as the "Red Planet"?',
+              textAlign: TextAlign.center,
+              style: GoogleFonts.robotoCondensed(
+                textStyle:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+              )),
         ),
         const SizedBox(height: 2),
         GridView.count(
@@ -206,7 +209,9 @@ class _DailyTestScreenState extends State<DailyTestScreen> {
             child: Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: isSelected ? AppColors.themeGreenColor : AppColors.textButtonColor,
+                color: isSelected
+                    ? AppColors.themeGreenColor
+                    : AppColors.textButtonColor,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Center(
@@ -232,4 +237,3 @@ class _DailyTestScreenState extends State<DailyTestScreen> {
     super.dispose();
   }
 }
-

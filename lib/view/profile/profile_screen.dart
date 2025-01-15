@@ -158,37 +158,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Padding(
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
               child:textWidget(
-                  text:'My Activity',
-                  fontSize: Dimensions.eighteen,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.textButtonColor),
-            ),
-            ListTile(
-              leading: const ImageIcon(
-                AssetImage(Assets.imagesReviews),
-                color: AppColors.themeGreenColor,
-                size: 22,
-              ),
-              title: textWidget(
-                  text:'Liked Posts',
-                  fontSize: Dimensions.fifteen,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.textButtonColor),
-              trailing: const Icon(
-                Icons.arrow_forward_ios_sharp,
-                size: 13,
-              ),
-              onTap: () {
-                Navigator.pushNamed(context, RoutesName.likedPostScreen);
-              },
-            ),
-            Divider(
-              color: Colors.grey[200],
-              thickness: 8,
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-              child:textWidget(
                   text:'Premium Features',
                   fontSize: Dimensions.eighteen,
                   fontWeight: FontWeight.w600,

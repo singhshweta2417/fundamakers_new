@@ -30,7 +30,9 @@ class _PreviousYearsPaperScreenState extends State<PreviousYearsPaperScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
+    final args =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final title = args?['title'];
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -61,64 +63,75 @@ class _PreviousYearsPaperScreenState extends State<PreviousYearsPaperScreen> {
                   value.previousYearPaperResponse.data!.data!.isNotEmpty) {
                 final previousYearList =
                     value.previousYearPaperResponse.data!.data!;
-                return ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  scrollDirection: Axis.vertical,
+                return ListView(
                   shrinkWrap: true,
-                  itemCount: previousYearList.length,
-                  itemBuilder: (context, index) {
-                    return listContainer(
-                        child: Row(
-                      children: [
-                        SizedBox(
-                            height: height * 0.07,
-                            child: IconButton(
-                              onPressed: () async {
-                                const pdfUrl =
-                                    'https://online.fundamakers.com/content/b9d2b5a165327713960ec0f9117df628.pdf';
-                                if (await canLaunchUrl(Uri.parse(pdfUrl))) {
-                                  await launchUrl(Uri.parse(pdfUrl));
-                                } else {
-                                  throw 'Could not launch $pdfUrl';
-                                }
-                              },
-                              icon: const Icon(Icons.download,
+                  children: [
+                    SizedBox(
+                      height: height * 0.05,
+                      child: textWidget(
+                          text: '  $title',
+                          fontSize: Dimensions.twenty,
+                          fontWeight: FontWeight.w700),
+                    ),
+                    ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: previousYearList.length,
+                      itemBuilder: (context, index) {
+                        return listContainer(
+                            child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            SizedBox(
+                              height: height * 0.07,
+                              child: const Icon(Icons.download,
                                   size: 30, color: AppColors.themeGreenColor),
-                            )),
-                        SizedBox(
-                            width: width * 0.03),
-                        SizedBox(
-                          width: width * 0.7,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              textWidget(
-                                  text: previousYearList[index]
-                                      .fileName
-                                      .toString(),
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: Dimensions.thirteen),
-                              textWidget(
-                                  text: previousYearList[index]
-                                      .description
-                                      .toString(),
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: Dimensions.thirteen,
-                                  maxLines: 1),
-                              textWidget(
-                                  text: previousYearList[index]
-                                      .uniqueName
-                                      .toString(),
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: Dimensions.thirteen,
-                                  maxLines: 1),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ));
-                  },
+                            ),
+                            SizedBox(width: width * 0.05),
+                            SizedBox(
+                              width: width * 0.7,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  textWidget(
+                                      text: previousYearList[index]
+                                          .fileName
+                                          .toString(),
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: Dimensions.thirteen),
+                                  textWidget(
+                                      text: previousYearList[index]
+                                          .description
+                                          .toString(),
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: Dimensions.thirteen,
+                                      maxLines: 1),
+                                  SizedBox(
+                                      height: height * 0.03,
+                                      child: textWidget(
+                                          onTap: () async {
+                                            const pdfUrl =
+                                                'https://online.fundamakers.com/content/b9d2b5a165327713960ec0f9117df628.pdf';
+                                            if (await canLaunchUrl(
+                                                Uri.parse(pdfUrl))) {
+                                              await launchUrl(
+                                                  Uri.parse(pdfUrl));
+                                            } else {
+                                              throw 'Could not launch $pdfUrl';
+                                            }
+                                          },
+                                          text: 'download.pdf',
+                                          color: Colors.blueAccent,
+                                          decoration: TextDecoration.underline,
+                                          fontSize: Dimensions.fifteen)),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ));
+                      },
+                    ),
+                  ],
                 );
               } else {
                 return noDataAvailable();

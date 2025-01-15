@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:fundamakers/res/app_colors.dart';
 import 'package:fundamakers/res/exit_pop_up.dart';
 import 'package:fundamakers/utils/routes/routes_name.dart';
-import 'package:fundamakers/view/community/community_post_screen.dart';
 import 'package:fundamakers/view/home/home_screen.dart';
 import 'package:fundamakers/view/my_course/my_course.dart';
 import 'package:fundamakers/view/profile/profile_screen.dart';
@@ -71,17 +70,8 @@ class BottomNavigationPageState extends State<BottomNavigationPage> {
               label: 'Test',
             ),
             NavigationDestination(
-              icon: Icon(Icons.groups_outlined),
-              selectedIcon: Icon(Icons.groups),
-              label: 'Community',
-            ),
-            NavigationDestination(
               icon: Icon(Icons.import_contacts),
               selectedIcon: Icon(Icons.menu_book),
-              // icon: Badge(
-              //   label: Text('2'),
-              //   child: Icon(Icons.messenger_sharp),
-              // ),
               label: 'My Course',
             ),
             NavigationDestination(
@@ -98,9 +88,6 @@ class BottomNavigationPageState extends State<BottomNavigationPage> {
           ///test menu
           const TestTypeListScreen(),
 
-          /// Community page
-          const CommunityPostScreen(),
-
           /// Course page
           const MyCourse(),
 
@@ -116,11 +103,9 @@ class NavigatorService {
   static navigateToHomeScreen(BuildContext context) {
     Navigator.pushNamed(context, RoutesName.bottomNavigationBar, arguments: 0);
   }
-
-  static void navigateToCommunityScreen(BuildContext context) {
+  static void navigateToTestScreen(BuildContext context) {
     Navigator.pushNamed(context, RoutesName.bottomNavigationBar, arguments: 1);
   }
-
   static void navigateToCourseScreen(BuildContext context) {
     Navigator.pushNamed(context, RoutesName.bottomNavigationBar, arguments: 2);
   }

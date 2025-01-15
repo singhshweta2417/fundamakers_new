@@ -1,13 +1,9 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fundamakers/generated/assets.dart';
 import 'package:fundamakers/main.dart';
 import 'package:fundamakers/res/app_colors.dart';
 import 'package:fundamakers/res/custom_widgets.dart';
-import 'package:fundamakers/view/profile/premium_features/library/b_school_info_screen.dart';
-import 'package:fundamakers/view/profile/premium_features/library/class_handouts_subject/class_handouts_subjects.dart';
-import 'package:fundamakers/view/profile/premium_features/library/notes_subjects_screen.dart';
-import 'package:fundamakers/view/profile/premium_features/library/previous_years_papers.dart';
+import 'package:fundamakers/utils/routes/routes_name.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LibraryScreen extends StatefulWidget {
@@ -18,29 +14,39 @@ class LibraryScreen extends StatefulWidget {
 }
 
 class _LibraryScreenState extends State<LibraryScreen> {
-  List<LibraryModel> libraryList = [
-    LibraryModel(
-        title: 'Class Handouts',
-        image: Assets.imagesCommunity,
-        screen: const ClassHandOutsSubjectsScreen()),
-    LibraryModel(
-      title: 'Previous Year Papers',
-      image: Assets.imagesCommunity,
-      screen: const PreviousYearsPaperScreen(),
-    ),
-    LibraryModel(
-      title: 'B-School Info',
-      image: Assets.imagesCommunity,
-      screen: const BSchoolInfoScreen(),
-    ),
-    LibraryModel(
-      title: 'Notes and E-Books',
-      image: Assets.imagesCommunity,
-      screen: const NotesAndSubjectsScreen(),
-    ),
-  ];
   @override
   Widget build(BuildContext context) {
+    List<LibraryModel> libraryList = [
+      LibraryModel(
+          title: 'Class Handouts',
+          image: Assets.imagesCommunity,
+          onTap: () {
+            Navigator.pushNamed(context, RoutesName.classHandOutsSubjectsScreen,
+                arguments: {'title': 'Class Handouts'});
+          }),
+      LibraryModel(
+          title: 'Previous Year Papers',
+          image: Assets.imagesCommunity,
+          onTap: () {
+            Navigator.pushNamed(context, RoutesName.previousYearsPaperScreen,
+                arguments: {'title': 'Previous Year Papers'});
+          }),
+      LibraryModel(
+          title: 'B-School Info',
+          image: Assets.imagesCommunity,
+          onTap: () {
+            Navigator.pushNamed(context, RoutesName.bSchoolInfoScreen,
+                arguments: {'title': 'B-School Info'});
+          }),
+      LibraryModel(
+          title: 'Notes and E-Books',
+          image: Assets.imagesCommunity,
+          onTap: () {
+            Navigator.pushNamed(context, RoutesName.notesAndSubjectsScreen,
+                arguments: {'title': 'Notes and E-Books'});
+          }),
+    ];
+
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
         appBar: AppBar(
@@ -68,17 +74,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
           itemCount: libraryList.length,
           itemBuilder: (context, index) {
             return InkWell(
-                onTap: () {
-                  if (libraryList[index].screen is Widget) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            libraryList[index].screen as Widget,
-                      ),
-                    );
-                  }
-                },
+                onTap: libraryList[index].onTap,
                 child: listContainer(
                     child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -108,10 +104,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                         ],
                       ),
                     ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.arrow_forward_ios),
-                    )
+                    const Icon(Icons.arrow_forward_ios),
                   ],
                 )));
           },
@@ -122,10 +115,10 @@ class _LibraryScreenState extends State<LibraryScreen> {
 class LibraryModel {
   final String title;
   final String image;
-  final dynamic screen;
+  final void Function()? onTap;
   LibraryModel({
     required this.title,
     required this.image,
-    required this.screen,
+    required this.onTap,
   });
 }

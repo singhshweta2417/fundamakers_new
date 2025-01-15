@@ -68,6 +68,7 @@ class _ClassHandOutsScreenState extends State<ClassHandOutsScreen> {
                   itemBuilder: (context, index) {
                     return listContainer(
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         SizedBox(
                             height: height * 0.07,
@@ -84,11 +85,10 @@ class _ClassHandOutsScreenState extends State<ClassHandOutsScreen> {
                               icon: const Icon(Icons.download,
                                   size: 30, color: AppColors.themeGreenColor),
                             )),
-                        SizedBox(width: width*0.03,),
+                        SizedBox(width: width*0.05),
                         SizedBox(
-                          width: width * 0.45,
+                          width: width * 0.7,
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               textWidget(
@@ -105,13 +105,24 @@ class _ClassHandOutsScreenState extends State<ClassHandOutsScreen> {
                                 fontSize: Dimensions.twelve,
                                 maxLines: 1,
                               ),
-                              textWidget(
-                                text: classHangOutsList[index]
-                                    .uniqueName
-                                    .toString(),
-                                fontWeight: FontWeight.w300,
-                                fontSize: Dimensions.twelve,
-                              ),
+                              SizedBox(
+                                  height: height * 0.03,
+                                  child: textWidget(
+                                      onTap: () async {
+                                        const pdfUrl =
+                                            'https://online.fundamakers.com/content/b9d2b5a165327713960ec0f9117df628.pdf';
+                                        if (await canLaunchUrl(
+                                            Uri.parse(pdfUrl))) {
+                                          await launchUrl(
+                                              Uri.parse(pdfUrl));
+                                        } else {
+                                          throw 'Could not launch $pdfUrl';
+                                        }
+                                      },
+                                      text: 'download.pdf',
+                                      color: Colors.blueAccent,
+                                      decoration: TextDecoration.underline,
+                                      fontSize: Dimensions.fifteen)),
                             ],
                           ),
                         ),

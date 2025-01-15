@@ -70,7 +70,7 @@ class _ClassHandOutsSubjectsScreenState
                   value.subjectResponse.data!.data!.isNotEmpty) {
                 final subjectView = value.subjectResponse.data!.data!;
                 return ListView.builder(
-                  physics: const BouncingScrollPhysics(),
+                  padding: EdgeInsets.only(top: height*0.015),
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   itemCount: subjectView.length,
@@ -85,7 +85,7 @@ class _ClassHandOutsSubjectsScreenState
                         padding: EdgeInsets.symmetric(
                             horizontal: width * 0.03, vertical: height * 0.02),
                         margin: EdgeInsets.symmetric(
-                            horizontal: width * 0.05, vertical: height * 0.02),
+                            horizontal: width * 0.05, vertical: height * 0.01),
                         decoration: BoxDecoration(
                           color: AppColors.themeWhiteColor,
                           borderRadius: BorderRadius.circular(20),

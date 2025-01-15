@@ -48,6 +48,7 @@ class CoursesViewModel with ChangeNotifier {
   }
 
   Future<void> subCoursesApi(dynamic data,context) async {
+    clearSubCoursesModel();
     try {
       final value = await _coursesRepo.subCourseApi(data);
       setSubCourseModel(value);

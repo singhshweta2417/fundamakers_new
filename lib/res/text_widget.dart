@@ -6,19 +6,17 @@ Widget textWidget({
   required String text,
   double? fontSize,
   FontWeight fontWeight = FontWeight.normal,
-  Color color = Colors.black,
+  Color? color,
   TextAlign textAlign = TextAlign.start,
-  bool strikethrough = false,
+  TextDecoration? decoration ,
   int? maxLines,
   String? fontFamily,
   bool showMore = false,
   int threshold = 150,
+  final void Function()?onTap,
   Function()? onToggle,
 }) {
-  // Determine if the text needs truncation
   bool isLongText = text.length > threshold;
-
-  // Displayed text based on `showMore`
   String displayedText =
   isLongText && !showMore ? '${text.substring(0, threshold)}...' : text;
 
@@ -26,17 +24,20 @@ Widget textWidget({
     crossAxisAlignment: CrossAxisAlignment.start,
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
-      Text(
-        displayedText,
-        textAlign: textAlign,
-        maxLines: maxLines,
-        overflow: maxLines != null ? TextOverflow.ellipsis : null,
-        style: TextStyle(
-          fontSize: fontSize ?? Dimensions.twenty,
-          fontWeight: fontWeight,
-          color: color,
-          decoration: strikethrough ? TextDecoration.lineThrough : null,
-        ).merge(GoogleFonts.robotoCondensed()),
+      InkWell(
+        onTap: onTap,
+        child: Text(
+          displayedText,
+          textAlign: textAlign,
+          maxLines: maxLines,
+          overflow: maxLines != null ? TextOverflow.ellipsis : null,
+          style: TextStyle(
+            fontSize: fontSize ?? Dimensions.twenty,
+            fontWeight: fontWeight,
+            color: color??Colors.black,
+            decoration: decoration,
+          ).merge(GoogleFonts.robotoCondensed()),
+        ),
       ),
       if (isLongText)
         GestureDetector(
