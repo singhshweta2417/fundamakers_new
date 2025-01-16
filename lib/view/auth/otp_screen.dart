@@ -1,11 +1,12 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:fundamakers/res/app_colors.dart';
 import 'package:fundamakers/res/components/app_btn.dart';
 import 'package:fundamakers/res/custom_widgets.dart';
 import 'package:fundamakers/res/text_widget.dart';
 import 'package:fundamakers/view_model/auth_view_model.dart';
 import 'package:pinput/pinput.dart';
-import 'package:provider/provider.dart';
 
 class OtpScreen extends StatefulWidget {
   const OtpScreen({super.key});
@@ -15,34 +16,66 @@ class OtpScreen extends StatefulWidget {
 }
 
 class _OtpScreenState extends State<OtpScreen> {
+  final TextEditingController controller = TextEditingController();
+  final FocusNode focusNode = FocusNode();
+  Timer? _timer;
+  int _remainingTime = 60;
+  bool _isRunning = false;
 
-  final focusNode = FocusNode();
+  @override
+  void initState() {
+    super.initState();
+    _startTimer();
+  }
 
   @override
   void dispose() {
     controller.dispose();
     focusNode.dispose();
+    _timer?.cancel();
     super.dispose();
   }
 
-  TextEditingController controller = TextEditingController();
+  void _startTimer() {
+    _timer?.cancel();
+    setState(() {
+      _remainingTime = 60;
+      _isRunning = true;
+    });
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        if (_remainingTime > 0) {
+          _remainingTime--;
+        } else {
+          timer.cancel();
+          _isRunning = false;
+        }
+      });
+    });
+  }
+
+  bool _canResendOtp(AuthenticationViewModel otpProvider) =>
+      !_isRunning &&
+          !otpProvider.otpLoading &&
+          controller.text.isEmpty &&
+          otpProvider.verifyMessage == null ||
+      otpProvider.errorMessage == null;
 
   @override
   Widget build(BuildContext context) {
     final Map<String, dynamic> args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final String? phone = args['phone'];
-    final defaultPinTheme = PinTheme(
+    final otpProvider = Provider.of<AuthenticationViewModel>(context);
+
+    const defaultPinTheme = PinTheme(
       width: 50,
       height: 64,
-      textStyle:
-          const TextStyle(fontSize: 20, color: Color.fromRGBO(70, 69, 66, 1)),
+      textStyle: TextStyle(fontSize: 20, color: Colors.black87),
       decoration: BoxDecoration(
-        color: const Color.fromRGBO(232, 235, 241, 0.37),
-        borderRadius: BorderRadius.circular(8),
-      ),
+          border: Border(bottom: BorderSide(color: Colors.black45))),
     );
-    final otpProvider = Provider.of<AuthenticationViewModel>(context);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Stack(
@@ -60,7 +93,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 SpaceHeight.getZeroTwo(context),
                 textWidget(
                     text:
-                        'Welcome to FundaMakers Community.Enter your mobile number to register with us.',
+                        'Welcome to FundaMakers Community. Enter your mobile number to register with us.',
                     fontWeight: FontWeight.w500,
                     fontSize: Dimensions.sixteen),
                 SpaceHeight.getZeroTwo(context),
@@ -69,12 +102,10 @@ class _OtpScreenState extends State<OtpScreen> {
                     length: 4,
                     controller: controller,
                     focusNode: focusNode,
-                    onCompleted: (String input) {},
-                    defaultPinTheme: defaultPinTheme.copyWith(
-                      decoration: const BoxDecoration(
-                          border: Border(
-                              bottom: BorderSide(color: Colors.black45))),
-                    ),
+                    onCompleted: (String input) {
+                      // Optional: Handle completed input here
+                    },
+                    defaultPinTheme: defaultPinTheme,
                     focusedPinTheme: defaultPinTheme.copyWith(
                       decoration: const BoxDecoration(
                           border: Border(
@@ -83,27 +114,25 @@ class _OtpScreenState extends State<OtpScreen> {
                     showCursor: true,
                   ),
                 ),
-                otpProvider.verifyMessage != null
-                    ? Center(
-                        child: Consumer<AuthenticationViewModel>(
-                          builder: (context, otpProvider, child) {
-                            return Visibility(
-                                visible: otpProvider.verifyMessage != null,
-                                child: textWidget(
-                                    textAlign: TextAlign.center,
-                                    text: otpProvider.verifyMessage ??
-                                        'Login Failed',
-                                    fontSize: Dimensions.fifteen,
-                                    color: AppColors.lightRedColor,
-                                    fontWeight: FontWeight.w500));
-                          },
-                        ),
-                      )
-                    : Container(),
+                Visibility(
+                  visible: otpProvider.verifyMessage != null ||
+                      otpProvider.errorMessage != null,
+                  child: Center(
+                    child: textWidget(
+                      textAlign: TextAlign.center,
+                      text: otpProvider.verifyMessage ??
+                          otpProvider.errorMessage ??
+                          '',
+                      fontSize: Dimensions.fifteen,
+                      color: AppColors.lightRedColor,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
                 SpaceHeight.getZeroTwo(context),
                 textWidget(
                     text:
-                        'Please enter 4 digit code we sent on your mobile number as SMS',
+                        'Please enter the 4-digit code sent to your mobile number via SMS.',
                     fontWeight: FontWeight.w400,
                     fontSize: Dimensions.sixteen),
                 SpaceHeight.getZeroTwo(context),
@@ -111,25 +140,32 @@ class _OtpScreenState extends State<OtpScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     textWidget(
-                        text: 'Resend OTP',
-                        fontWeight: FontWeight.w600,
-                        fontSize: Dimensions.sixteen,
-                        color: AppColors.lightRedColor),
+                      onTap: () {
+                        if (_canResendOtp(otpProvider)) {
+                          otpProvider.otpSentApi(phone!, context);
+                          _startTimer();
+                          otpProvider.clearErrors();
+                        }
+                      },
+                      text: 'Resend OTP',
+                      fontWeight: FontWeight.w600,
+                      fontSize: Dimensions.sixteen,
+                      color: !_isRunning
+                          ? AppColors.lightRedColor
+                          : AppColors.lightRedColor.withAlpha(40),
+                    ),
                     textWidget(
-                        text: '0:50',
+                        text: '0:$_remainingTime',
                         fontWeight: FontWeight.w600,
                         color: AppColors.textButtonColor,
-                        fontSize: Dimensions.sixteen)
+                        fontSize: Dimensions.sixteen),
                   ],
                 ),
                 SpaceHeight.getZeroTwo(context),
                 AppBtn(
                   loading: otpProvider.verifyLoading,
                   onTap: () {
-                    otpProvider.verifyOtpApi(
-                        phone.toString(), controller.text, context);
-                    if (controller.text.isNotEmpty) {
-                    } else {}
+                    otpProvider.verifyOtpApi(phone!, controller.text, context);
                   },
                   title: 'Confirm and Continue',
                 ),

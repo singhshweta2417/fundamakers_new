@@ -95,7 +95,8 @@ class _MenuCourseState extends State<MenuCourse> {
                           onTap: () {
                             Navigator.pushNamed(
                                 context, RoutesName.planCourse, arguments: {
-                              'subCourseId': subCoursesView[index].id.toString()
+                              'subCourseId': subCoursesView[index].id.toString(),
+                              'title':subCoursesView[index].name.toString()
                             });
                           },
                           child: Container(

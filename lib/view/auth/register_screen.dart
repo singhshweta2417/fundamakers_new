@@ -42,6 +42,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
       //subCoursesApi
       final coursesView = Provider.of<CoursesViewModel>(context, listen: false);
       coursesView.coursesApi(context);
+      if (coursesView.coursesResponse.data != null &&
+          coursesView.coursesResponse.data!.data!.isNotEmpty) {
+        final firstCourse = coursesView.coursesResponse.data!.data!.first;
+        setSubCourse(firstCourse.id.toString());
+      }
     });
     mobileNumber.addListener(() {
       setState(() {
@@ -202,20 +207,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     : 'CAT',
                                 onSelected: (String? newValue) {
                                   if (newValue != null) {
-                                    if (coursesView.isNotEmpty) {
-                                      setState(() {
-                                        dropdownValue = newValue;
-                                        CourseData selectedCourse =
-                                            coursesView.firstWhere(
-                                          (element) =>
-                                              element.name == dropdownValue,
-                                          orElse: () =>
-                                              CourseData(id: 0, name: 'CAT'),
-                                        );
-                                        setSubCourse(
-                                            selectedCourse.id.toString());
-                                      });
-                                    }
+                                    setState(() {
+                                      dropdownValue = newValue;
+                                      // Find the selected course and update subCoursesView
+                                      CourseData selectedCourse =
+                                          coursesView.firstWhere(
+                                        (element) =>
+                                            element.name == dropdownValue,
+                                        orElse: () =>
+                                            CourseData(id: 0, name: ''),
+                                      );
+                                      setSubCourse(
+                                          selectedCourse.id.toString());
+                                    });
                                   }
                                 },
                                 dropdownMenuEntries: (coursesView.isNotEmpty)
@@ -224,14 +228,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                             (CourseData course) {
                                         return DropdownMenuEntry<String>(
                                           value: course.name ?? 'CAT',
-                                          style: ButtonStyle(
-                                            padding: WidgetStateProperty.all<
-                                                    EdgeInsetsGeometry>(
-                                                EdgeInsets.zero),
-                                            backgroundColor:
-                                                WidgetStateProperty.all<Color>(
-                                                    Colors.white),
-                                          ),
                                           label: course.name ?? 'CAT',
                                         );
                                       }).toList()
@@ -247,7 +243,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 initialSelection: (subCoursesView != null &&
                                         subCoursesView.isNotEmpty)
                                     ? (subCoursesView.first.name ?? '')
-                                    : 'CAT 23',
+                                    : 'No Sub-Courses',
                                 onSelected: (String? newValue) {
                                   if (newValue != null) {
                                     setState(() {
@@ -262,15 +258,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                             (SubCourseData subCourse) {
                                         return DropdownMenuEntry<String>(
                                           value: subCourse.name ?? '',
-                                          style: ButtonStyle(
-                                            padding: WidgetStateProperty.all<
-                                                    EdgeInsetsGeometry>(
-                                                EdgeInsets.zero),
-                                            backgroundColor:
-                                                WidgetStateProperty.all<Color>(
-                                              Colors.white,
-                                            ),
-                                          ),
                                           label: subCourse.name ?? '',
                                         );
                                       }).toList()

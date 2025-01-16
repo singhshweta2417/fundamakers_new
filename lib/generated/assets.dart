@@ -4,8 +4,7 @@ class Assets {
 
   static const String iconsBubbleIcon = 'assets/icons/bubble_icon.png';
   static const String iconsDropIcon = 'assets/icons/drop_icon.png';
-  static const String imagesArrow = 'assets/images/arrow.jpg';
-  static const String imagesArrowpng = 'assets/images/arrowpng.png';
+  static const String imagesArrowPng = 'assets/images/arrow_png.png';
   static const String imagesAskQuestion = 'assets/images/askQuestion.png';
   static const String imagesBook = 'assets/images/book.png';
   static const String imagesBrowse = 'assets/images/browse.png';
@@ -33,9 +32,10 @@ class Assets {
   static const String imagesProfileProfession = 'assets/images/profileProfession.png';
   static const String imagesRefundPolicy = 'assets/images/refundPolicy.png';
   static const String imagesReviews = 'assets/images/reviews.png';
-  static const String imagesSimpleheart = 'assets/images/simpleheart.png';
+  static const String imagesSimpleHeart = 'assets/images/simple_heart.png';
   static const String imagesSolution = 'assets/images/solution.png';
   static const String imagesTermsIcon = 'assets/images/termsIcon.png';
+  static const String imagesTestImage = 'assets/images/test_image.png';
   static const String logoFundamakers = 'assets/logo/fundamakers.png';
   static const String logoLogoFundaMakers = 'assets/logo/logoFundaMakers.png';
 

@@ -125,7 +125,7 @@ class _MyCourseVideoState extends State<MyCourseVideo> {
                       ]),
                   SizedBox(height: height*0.01,),
                   Image(
-                    image: const AssetImage(Assets.imagesArrowpng),
+                    image: const AssetImage(Assets.imagesArrowPng),
                     width: width * 0.9,
                     height: height*0.025,
                   ),

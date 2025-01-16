@@ -24,4 +24,9 @@ class RoutesName {
   static const previousYearsPaperScreen = '/previous_years_paper_screen';
   static const bSchoolInfoScreen = '/b_school_info_screen';
   static const notesAndSubjectsScreen = '/notes_and_subjects_screen';
+  static const pDFViewScreen = '/pdf_view_screen';
+  static const practiceBookScreen = '/practice_book_screen';
+  static const gkZoneScreen = '/gk_zone_screen';
+  static const libraryScreen = '/library_screen';
+  static const policyScreen = '/policy_screen';
 }

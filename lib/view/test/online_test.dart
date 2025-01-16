@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fundamakers/generated/assets.dart';
 import 'package:fundamakers/main.dart';
 import 'package:fundamakers/res/app_colors.dart';
+import 'package:fundamakers/res/text_widget.dart';
 import 'package:fundamakers/view/profile/online_test_result.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -119,6 +120,9 @@ class OnlineTestState extends State<OnlineTest> {
 
   @override
   Widget build(BuildContext context) {
+    final args =
+    ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final title = args?['title'];
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -169,22 +173,27 @@ class OnlineTestState extends State<OnlineTest> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Center(
-              child: Text(
-                "\nOnline Test",
-                style: GoogleFonts.robotoCondensed(
-                  textStyle: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.themeGreenColor,
+            Container(
+              height: height * 0.06,
+              width: width * 0.3,
+              padding: EdgeInsets.symmetric(horizontal: width * 0.3),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  textWidget(
+                      text: title.toString(),
+                      fontSize: Dimensions.eighteen,
+                      fontWeight: FontWeight.w600),
+                  const Image(
+                    image: AssetImage(Assets.imagesArrowPng),
                   ),
-                ),
-                textAlign: TextAlign.center,
+                ],
               ),
             ),
             Center(
               child: Image(
-                image: const AssetImage(Assets.imagesArrow),
+                image: const AssetImage(Assets.imagesArrowPng),
                 width: isTablet(context)
                     ? MediaQuery.of(context).size.width * 0.2
                     : MediaQuery.of(context).size.width * 0.3,

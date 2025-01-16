@@ -65,10 +65,24 @@ class _MyCourseState extends State<MyCourse> {
               return ListView(
                 shrinkWrap: true,
                 children: [
-                  textWidget(
-                      text: 'My Course',
-                      fontWeight: FontWeight.w700,
-                      fontSize: Dimensions.twentyFour),
+                  Container(
+                    height: height * 0.06,
+                    width: width * 0.3,
+                    padding: EdgeInsets.symmetric(horizontal: width * 0.3),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        textWidget(
+                            text:'My Course',
+                            fontSize: Dimensions.eighteen,
+                            fontWeight: FontWeight.w600),
+                        const Image(
+                          image: AssetImage(Assets.imagesArrowPng),
+                        ),
+                      ],
+                    ),
+                  ),
                   GridView.count(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),

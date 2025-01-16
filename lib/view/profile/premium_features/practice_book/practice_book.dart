@@ -8,6 +8,7 @@ import 'package:fundamakers/res/custom_widgets.dart';
 import 'package:fundamakers/res/text_widget.dart';
 import 'package:fundamakers/view_model/premium_view_model.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PracticeBookScreen extends StatefulWidget {
   const PracticeBookScreen({Key? key}) : super(key: key);
@@ -29,7 +30,9 @@ class _PracticeBookScreenState extends State<PracticeBookScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
+    final Map<String, dynamic> args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final String? title = args['title'];
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -59,76 +62,112 @@ class _PracticeBookScreenState extends State<PracticeBookScreen> {
                   value.practiceBookResponse.data!.data != null &&
                   value.practiceBookResponse.data!.data!.isNotEmpty) {
                 final practiceBookList = value.practiceBookResponse.data!.data!;
-                return ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  scrollDirection: Axis.vertical,
+                return ListView(
                   shrinkWrap: true,
-                  itemCount: practiceBookList.length,
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                        // onTap: (){
-                        //   Navigator.push(context, MaterialPageRoute(builder: (context)=>const CourseVideo()));
-                        // },
-                        child: listContainer(
-                            child: Row(
-                      children: [
-                        SizedBox(
-                          height: height * 0.07,
-                          child: const Image(
-                              image: AssetImage(Assets.imagesCommunity)),
-                        ),
-                        SizedBox(
-                          width: width * 0.05,
-                        ),
-                        SizedBox(
-                          width: width * 0.45,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              textWidget(
-                                  text: practiceBookList[index].name.toString(),
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: Dimensions.thirteen),
-                              textWidget(
-                                  text: practiceBookList[index]
-                                      .fileName
-                                      .toString(),
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: Dimensions.twelve),
-                              Row(
-                                children: [
-                                  RatingBar.builder(
-                                    ignoreGestures: false,
-                                    initialRating: 5,
-                                    // double.parse(editReviewItems!.rating.toString()),
-                                    minRating: 0,
-                                    direction: Axis.horizontal,
-                                    allowHalfRating: true,
-                                    itemCount: 5,
-                                    itemSize: 23.0,
-                                    itemBuilder: (context, _) => const Icon(
-                                      Icons.star,
-                                      color: Colors.amber,
-                                    ),
-                                    onRatingUpdate: (double value) {
-                                      // updatePublishedUserProvider.updatePublishedReview(
-                                      //     context,
-                                      //     editReviewItems.id.toString(),
-                                      //     value.toString(),
-                                      //     editReviewItems.discription.toString());
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ],
+                  children: [
+                    Container(
+                      height: height * 0.06,
+                      width: width * 0.3,
+                      padding: EdgeInsets.symmetric(horizontal: width * 0.3),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          textWidget(
+                              text: title.toString(),
+                              fontSize: Dimensions.eighteen,
+                              fontWeight: FontWeight.w600),
+                          const Image(
+                            image: AssetImage(Assets.imagesArrowPng),
                           ),
-                        ),
-                        const Spacer(),
-                        const Icon(Icons.arrow_forward_ios),
-                      ],
-                    )));
-                  },
+                        ],
+                      ),
+                    ),
+                    ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: practiceBookList.length,
+                      itemBuilder: (context, index) {
+                        final pdfLink =
+                            '${practiceBookList[index].host}${practiceBookList[index].filePath}${practiceBookList[index].fileName}';
+                        return InkWell(
+                            onTap: () async {
+                              // const pdfUrl =
+                              //     'https://online.fundamakers.com/content/b9d2b5a165327713960ec0f9117df628.pdf';
+                              if (await canLaunchUrl(Uri.parse(pdfLink))) {
+                                await launchUrl(Uri.parse(pdfLink));
+                              } else {
+                                throw 'Could not launch $pdfLink';
+                              }
+                            },
+                            child: listContainer(
+                                child: Row(
+                              children: [
+                                SizedBox(
+                                  height: height * 0.07,
+                                  child: const Image(
+                                      image:
+                                          AssetImage(Assets.imagesCommunity)),
+                                ),
+                                SizedBox(
+                                  width: width * 0.05,
+                                ),
+                                SizedBox(
+                                  width: width * 0.45,
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      textWidget(
+                                          text: practiceBookList[index]
+                                              .name
+                                              .toString(),
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: Dimensions.thirteen),
+                                      textWidget(
+                                          text: practiceBookList[index]
+                                              .fileName
+                                              .toString(),
+                                          fontWeight: FontWeight.w300,
+                                          fontSize: Dimensions.twelve),
+                                      Row(
+                                        children: [
+                                          RatingBar.builder(
+                                            ignoreGestures: true,
+                                            initialRating: 5,
+                                            // double.parse(editReviewItems!.rating.toString()),
+                                            minRating: 0,
+                                            direction: Axis.horizontal,
+                                            allowHalfRating: true,
+                                            itemCount: 5,
+                                            itemSize: 23.0,
+                                            itemBuilder: (context, _) =>
+                                                const Icon(
+                                              Icons.star,
+                                              color: Colors.amber,
+                                            ),
+                                            onRatingUpdate: (double value) {
+                                              // updatePublishedUserProvider.updatePublishedReview(
+                                              //     context,
+                                              //     editReviewItems.id.toString(),
+                                              //     value.toString(),
+                                              //     editReviewItems.discription.toString());
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const Spacer(),
+                                const Icon(Icons.arrow_forward_ios),
+                              ],
+                            )));
+                      },
+                    ),
+                  ],
                 );
               } else {
                 return noDataAvailable();

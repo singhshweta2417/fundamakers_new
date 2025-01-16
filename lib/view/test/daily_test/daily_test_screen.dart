@@ -119,7 +119,7 @@ class DailyTestScreenState extends State<DailyTestScreen> {
               ),
             ),
             Image(
-              image: const AssetImage(Assets.imagesArrow),
+              image: const AssetImage(Assets.imagesArrowPng),
               width: width * 0.3,
             ),
             Expanded(

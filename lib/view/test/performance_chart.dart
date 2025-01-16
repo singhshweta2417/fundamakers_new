@@ -151,7 +151,7 @@ class _PerformanceChartState extends State<PerformanceChart> {
             ),
             Center(
               child: Image(
-                image: const AssetImage(Assets.imagesArrow),
+                image: const AssetImage(Assets.imagesArrowPng),
                 width: isTablet(context)
                     ? MediaQuery.of(context).size.width * 0.2
                     : MediaQuery.of(context).size.width * 0.3,

@@ -6,10 +6,7 @@ import 'package:fundamakers/main.dart';
 import 'package:fundamakers/res/exit_pop_up.dart';
 import 'package:fundamakers/res/text_widget.dart';
 import 'package:fundamakers/utils/routes/routes_name.dart';
-import 'package:fundamakers/view/profile/feedback_information/policies.dart';
-import 'package:fundamakers/view/profile/premium_features/gk_zone/gk_zone.dart';
-import 'package:fundamakers/view/profile/premium_features/library/library_screen.dart';
-import 'package:fundamakers/view/profile/premium_features/practice_book/practice_book.dart';
+import 'package:fundamakers/view_model/auth_view_model.dart';
 import 'package:fundamakers/view_model/user_details_view_model.dart';
 import 'package:fundamakers/view_model/user_view_model.dart';
 import 'package:fundamakers/res/app_colors.dart';
@@ -66,6 +63,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         },
       ),
     ];
+    final otpProvider = Provider.of<AuthenticationViewModel>(context);
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -112,8 +111,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     alignment: Alignment.center,
                     child: textWidget(
-                        text:
-                        data.title,
+                        text: data.title,
                         fontSize: Dimensions.fifteen,
                         fontWeight: FontWeight.w500,
                         color: AppColors.textButtonColor),
@@ -128,7 +126,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Padding(
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
               child: textWidget(
-                  text:'Account Setting',
+                  text: 'Account Setting',
                   fontSize: Dimensions.eighteen,
                   fontWeight: FontWeight.w600,
                   color: AppColors.textButtonColor),
@@ -141,8 +139,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 AssetImage(Assets.imagesProfile),
                 color: AppColors.themeGreenColor,
               ),
-              title:textWidget(
-                  text:'Edit Profile',
+              title: textWidget(
+                  text: 'Edit Profile',
                   fontSize: Dimensions.fifteen,
                   fontWeight: FontWeight.w500,
                   color: AppColors.textButtonColor),
@@ -157,8 +155,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-              child:textWidget(
-                  text:'Premium Features',
+              child: textWidget(
+                  text: 'Premium Features',
                   fontSize: Dimensions.eighteen,
                   fontWeight: FontWeight.w600,
                   color: AppColors.textButtonColor),
@@ -179,10 +177,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 size: 13,
               ),
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const PracticeBookScreen()));
+                Navigator.pushNamed(context, RoutesName.practiceBookScreen,
+                    arguments: {'title': 'Practice Book'});
               },
             ),
             ListTile(
@@ -201,10 +197,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 size: 13,
               ),
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const GkZoneScreen()));
+                Navigator.pushNamed(context, RoutesName.gkZoneScreen,
+                    arguments: {'title': 'GK Zone'});
               },
             ),
             ListTile(
@@ -223,10 +217,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 size: 13,
               ),
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const LibraryScreen()));
+                Navigator.pushNamed(context, RoutesName.libraryScreen,
+                    arguments: {'title': 'Library'});
               },
             ),
             ListTile(
@@ -276,10 +268,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 size: 13,
               ),
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const PolicyScreen()));
+                Navigator.pushNamed(context, RoutesName.policyScreen,
+                    arguments: {'title': 'Terms and Condition'});
               },
             ),
             ListTile(
@@ -297,10 +287,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 size: 13,
               ),
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const PolicyScreen()));
+                Navigator.pushNamed(context, RoutesName.policyScreen,
+                    arguments: {'title': 'Privacy Policy'});
               },
             ),
             ListTile(
@@ -318,10 +306,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 size: 13,
               ),
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const PolicyScreen()));
+                Navigator.pushNamed(context, RoutesName.policyScreen,
+                    arguments: {'title': 'Refund Policy'});
               },
             ),
             ListTile(
@@ -339,10 +325,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 size: 13,
               ),
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const PolicyScreen()));
+                Navigator.pushNamed(context, RoutesName.policyScreen,
+                    arguments: {'title': 'Help'});
               },
             ),
             const SizedBox(height: 30),
@@ -363,6 +347,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       RoutesName.loginScreen,
                       (Route<dynamic> route) => false,
                     );
+                    otpProvider.clearErrors();
                     HapticFeedback.vibrate();
                   },
                 );

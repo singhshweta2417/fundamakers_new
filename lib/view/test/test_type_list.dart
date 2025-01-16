@@ -53,58 +53,61 @@ class _TestTypeListScreenState extends State<TestTypeListScreen> {
                 value.testListResponse.data!.data != null &&
                 value.testListResponse.data!.data!.isNotEmpty) {
               final testListView = value.testListResponse.data!.data!;
-              return ListView.builder(
-                  padding: EdgeInsets.only(top: height * 0.03),
-                  physics: const BouncingScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: testListView.length,
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                        onTap: () {
-                          if (testListView[index].id == 12) {
-                            Navigator.pushNamed(
-                                context, RoutesName.subListMenu);
-                          } else {
-                            Navigator.pushNamed(
-                                context, RoutesName.mainTestList);
-                          }
-                        },
-                        child: listContainer(
-                            child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            SizedBox(
-                              height: height * 0.07,
-                              child: const Image(
-                                image: AssetImage(Assets.imagesCommunity),
-                              ),
-                            ),
-                            SizedBox(width: width * 0.03),
-                            Column(
+              return ListView(
+                shrinkWrap: true,
+                children: [
+                  Container(
+                    height: height * 0.06,
+                    width: width * 0.3,
+                    padding: EdgeInsets.symmetric(horizontal: width * 0.3),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        textWidget(
+                            text:'Test',
+                            fontSize: Dimensions.eighteen,
+                            fontWeight: FontWeight.w600),
+                        const Image(
+                          image: AssetImage(Assets.imagesArrowPng),
+                        ),
+                      ],
+                    ),
+                  ),
+                  ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                      padding: EdgeInsets.zero,
+                      shrinkWrap: true,
+                      itemCount: testListView.length,
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                            onTap: () {
+                              if (testListView[index].id == 12) {
+                                Navigator.pushNamed(
+                                    context, RoutesName.subListMenu,arguments: {'title':testListView[index].name});
+                              } else {
+                                Navigator.pushNamed(
+                                    context, RoutesName.mainTestList,arguments: {'title':testListView[index].name});
+                              }
+                            },
+                            child: listContainer(
+                              padding:EdgeInsets.symmetric(horizontal: height*0.02,vertical: height*0.03),
+                                child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                SizedBox(
+                                  height: height * 0.05,
+                                  width: width * 0.1,
+                                  child: const Image(
+                                    image: AssetImage(Assets.imagesTestImage),
+                                  ),
+                                ),
+                                SizedBox(width: width * 0.07),
                                 textWidget(
                                     text: testListView[index].name.toString(),
                                     fontWeight: FontWeight.w600,
                                     fontSize: Dimensions.thirteen),
-                                textWidget(
-                                    text:
-                                        'Test Available: ${testListView[index].totalSections.toString()}',
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: Dimensions.twelve),
-                                textWidget(
-                                    text:
-                                        'Test taken: ${testListView[index].hasTimeLimit.toString()}',
-                                    fontWeight: FontWeight.w300,
-                                    fontSize: Dimensions.twelve),
-                              ],
-                            ),
-                            const Spacer(),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
+                                const Spacer(),
                                 IconButton(
                                   onPressed: () {
                                     showModalBottomSheet(
@@ -123,16 +126,11 @@ class _TestTypeListScreenState extends State<TestTypeListScreen> {
                                     size: 20,
                                   ),
                                 ),
-                                const Icon(
-                                  Icons.arrow_forward_ios,
-                                  size: 20,
-                                ),
-                                SizedBox(height: height * 0.05)
                               ],
-                            )
-                          ],
-                        )));
-                  });
+                            )));
+                      }),
+                ],
+              );
             } else {
               return noDataAvailable();
             }

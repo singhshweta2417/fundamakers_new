@@ -3,6 +3,7 @@ import 'package:fundamakers/generated/assets.dart';
 import 'package:fundamakers/main.dart';
 import 'package:fundamakers/res/app_colors.dart';
 import 'package:fundamakers/res/custom_widgets.dart';
+import 'package:fundamakers/res/text_widget.dart';
 import 'package:fundamakers/utils/routes/routes_name.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -46,7 +47,9 @@ class _LibraryScreenState extends State<LibraryScreen> {
                 arguments: {'title': 'Notes and E-Books'});
           }),
     ];
-
+    final Map<String, dynamic> args =
+    ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final String? title = args['title'];
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
         appBar: AppBar(
@@ -66,48 +69,68 @@ class _LibraryScreenState extends State<LibraryScreen> {
             icon: const Icon(Icons.arrow_back_ios),
           ),
         ),
-        body: ListView.builder(
-          padding: EdgeInsets.only(top: height * 0.03),
-          physics: const BouncingScrollPhysics(),
-          scrollDirection: Axis.vertical,
+        body: ListView(
           shrinkWrap: true,
-          itemCount: libraryList.length,
-          itemBuilder: (context, index) {
-            return InkWell(
-                onTap: libraryList[index].onTap,
-                child: listContainer(
-                    child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    SizedBox(
-                      height: height * 0.07,
-                      child: const Image(
-                        image: AssetImage(Assets.imagesCommunity),
-                      ),
-                    ),
-                    SizedBox(
-                      width: width * 0.45,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            libraryList[index].title,
-                            style: GoogleFonts.robotoCondensed(
-                              textStyle: const TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 15,
-                              ),
-                            ),
+          children: [
+            Container(
+              height: height * 0.06,
+              width: width * 0.3,
+              padding: EdgeInsets.symmetric(horizontal: width * 0.3),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  textWidget(
+                      text: title.toString(),
+                      fontSize: Dimensions.eighteen,
+                      fontWeight: FontWeight.w600),
+                  const Image(
+                    image: AssetImage(Assets.imagesArrowPng),
+                  ),
+                ],
+              ),
+            ),
+            ListView.builder(
+              shrinkWrap: true,
+              itemCount: libraryList.length,
+              itemBuilder: (context, index) {
+                return InkWell(
+                    onTap: libraryList[index].onTap,
+                    child: listContainer(
+                        child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        SizedBox(
+                          height: height * 0.07,
+                          child: const Image(
+                            image: AssetImage(Assets.imagesCommunity),
                           ),
-                        ],
-                      ),
-                    ),
-                    const Icon(Icons.arrow_forward_ios),
-                  ],
-                )));
-          },
+                        ),
+                        SizedBox(
+                          width: width * 0.45,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                libraryList[index].title,
+                                style: GoogleFonts.robotoCondensed(
+                                  textStyle: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Icon(Icons.arrow_forward_ios),
+                      ],
+                    )));
+              },
+            ),
+          ],
         ));
   }
 }

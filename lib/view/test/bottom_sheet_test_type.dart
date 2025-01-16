@@ -8,8 +8,8 @@ import 'package:fundamakers/view_model/test_type_details_view_model.dart';
 import 'package:provider/provider.dart';
 
 class TestDetailsScreen extends StatefulWidget {
-  final String?testId;
-  const TestDetailsScreen({Key? key,this.testId}) : super(key: key);
+  final String? testId;
+  const TestDetailsScreen({Key? key, this.testId}) : super(key: key);
 
   @override
   State<TestDetailsScreen> createState() => _TestDetailsScreenState();
@@ -23,16 +23,9 @@ class _TestDetailsScreenState extends State<TestDetailsScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         final testTypeDetails =
-        Provider.of<TestTypeViewModel>(context, listen: false);
+            Provider.of<TestTypeViewModel>(context, listen: false);
         testTypeDetails.testTypeDetailApi(widget.testId, context);
       });
-      // final args =
-      //     ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-
-      // if (args != null && args.containsKey('testId')) {
-      //   final testId = args['testId'];
-      //
-      // }
     });
   }
 
@@ -58,64 +51,57 @@ class _TestDetailsScreenState extends State<TestDetailsScreen> {
           if (value.testTypeDetailsResponse.data != null &&
               value.testTypeDetailsResponse.data!.data != null) {
             final testDetailsView = value.testTypeDetailsResponse.data!.data!;
-            return BottomSheet(
-                enableDrag: false,
-                showDragHandle: true,
-                onClosing: () {
-                  Navigator.pop(context);
-                },
-                builder: (context) {
-                  return Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: width * 0.03,
-                      vertical: height * 0.03,
-                    ),
-                    width: width,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(width: width * 0.38),
-                            textWidget(
-                              text: 'Details',
-                              fontSize: Dimensions.twentyFour,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.textButtonColor,
-                            ),
-                            const Spacer(),
-                            IconButton(
-                              padding: EdgeInsets.zero,
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              icon: const Icon(
-                                Icons.close,
-                                size: 30,
-                              ),
-                            ),
-                          ],
+            return Container(
+              padding: EdgeInsets.symmetric(
+                  horizontal: width * 0.03, vertical: height * 0.02),
+              width: width,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(width: width * 0.38),
+                      textWidget(
+                        text: 'Details',
+                        fontSize: Dimensions.twentyFour,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textButtonColor,
+                      ),
+                      const Spacer(),
+                      IconButton(
+                        padding: EdgeInsets.zero,
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: const Icon(
+                          Icons.close,
+                          size: 30,
                         ),
-                        SizedBox(height: height * 0.02),
-                        _buildDetailRow(
-                            'Test Type:', testDetailsView.name ?? ''),
-                        SizedBox(height: height * 0.02),
-                        _buildDescriptionRow('Description:',
-                            testDetailsView.description ?? '', width),
-                        SizedBox(height: height * 0.02),
-                        _buildDetailRow('Total Sections:',
-                            testDetailsView.totalSections.toString()),
-                        SizedBox(height: height * 0.02),
-                        _buildDetailRow('Positive Marking:',
-                            testDetailsView.positiveMarkingMcq.toString()),
-                        SizedBox(height: height * 0.02),
-                        _buildDetailRow('Negative Marking:',
-                            testDetailsView.negativeMarkingMcq.toString()),
-                      ],
-                    ),
-                  );
-                });
+                      ),
+                    ],
+                  ),
+                  Image(
+                    image: const AssetImage(Assets.imagesArrowPng),
+                    width: width * 0.3,
+                  ),
+                  SizedBox(height: height * 0.02),
+                  _buildDetailRow('Test Type:', testDetailsView.name ?? ''),
+                  SizedBox(height: height * 0.02),
+                  _buildDescriptionRow(
+                      'Description:', testDetailsView.description ?? '', width),
+                  SizedBox(height: height * 0.02),
+                  _buildDetailRow('Total Sections:',
+                      testDetailsView.totalSections.toString()),
+                  SizedBox(height: height * 0.02),
+                  _buildDetailRow('Positive Marking:',
+                      testDetailsView.positiveMarkingMcq.toString()),
+                  SizedBox(height: height * 0.02),
+                  _buildDetailRow('Negative Marking:',
+                      testDetailsView.negativeMarkingMcq.toString()),
+                ],
+              ),
+            );
           } else {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,

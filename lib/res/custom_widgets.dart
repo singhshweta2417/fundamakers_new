@@ -42,12 +42,12 @@ Widget verticalBorder({Color? color}) {
   );
 }
 
-Widget listContainer({required child}) {
+Widget listContainer({required child,padding,margin}) {
   return Container(
     alignment: Alignment.center,
-    padding:
+    padding:padding??
         EdgeInsets.symmetric(horizontal: width * 0.03, vertical: height * 0.02),
-    margin:
+    margin:margin??
         EdgeInsets.symmetric(horizontal: width * 0.03, vertical: height * 0.01),
     decoration: BoxDecoration(
       color: AppColors.themeWhiteColor,

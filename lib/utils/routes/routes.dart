@@ -10,15 +10,20 @@ import 'package:fundamakers/view/home/notifications.dart';
 import 'package:fundamakers/view/home/plans/plan_lists.dart';
 import 'package:fundamakers/view/my_course/intro_course_screen.dart';
 import 'package:fundamakers/view/my_course/my_course_video_list.dart';
+import 'package:fundamakers/view/pdf_view_screen.dart';
+import 'package:fundamakers/view/profile/feedback_information/policies.dart';
 import 'package:fundamakers/view/profile/my_activity/liked_posts.dart';
 import 'package:fundamakers/view/profile/online_classes/online_classes_screen.dart';
 import 'package:fundamakers/view/profile/online_test_result.dart';
 import 'package:fundamakers/view/profile/order_history.dart';
+import 'package:fundamakers/view/profile/premium_features/gk_zone/gk_zone.dart';
 import 'package:fundamakers/view/profile/premium_features/library/b_school_info_screen.dart';
 import 'package:fundamakers/view/profile/premium_features/library/class_handouts_subject/class_handouts_screen.dart';
 import 'package:fundamakers/view/profile/premium_features/library/class_handouts_subject/class_handouts_subjects.dart';
+import 'package:fundamakers/view/profile/premium_features/library/library_screen.dart';
 import 'package:fundamakers/view/profile/premium_features/library/notes_subjects_screen.dart';
 import 'package:fundamakers/view/profile/premium_features/library/previous_years_papers.dart';
+import 'package:fundamakers/view/profile/premium_features/practice_book/practice_book.dart';
 import 'package:fundamakers/view/profile/user_details_screen.dart';
 import 'package:fundamakers/view/splash_screen.dart';
 import 'package:fundamakers/view/test/bottom_sheet_test_type.dart';
@@ -79,6 +84,16 @@ class Routers {
         return (context) => const BSchoolInfoScreen();
       case RoutesName.notesAndSubjectsScreen:
         return (context) => const NotesAndSubjectsScreen();
+      case RoutesName.pDFViewScreen:
+        return (context) => const PDFViewScreen();
+      case RoutesName.practiceBookScreen:
+        return (context) => const PracticeBookScreen();
+      case RoutesName.gkZoneScreen:
+        return (context) => const GkZoneScreen();
+      case RoutesName.libraryScreen:
+        return (context) => const LibraryScreen();
+      case RoutesName.policyScreen:
+        return (context) => const PolicyScreen();
       default:
         return (context) => const Scaffold(
               body: Center(

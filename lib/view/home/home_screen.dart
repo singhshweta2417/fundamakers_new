@@ -99,8 +99,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: AppColors.textButtonColor,
                         textAlign: TextAlign.center),
                     Image(
-                      image: const AssetImage(Assets.imagesArrow),
-                      width: height * 0.3,
+                      image: const AssetImage(Assets.imagesArrowPng),
+                      width: width * 0.3,
                     ),
                     SpaceHeight.getZeroTwo(context),
                     textWidget(
@@ -110,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: AppColors.textButtonColor,
                         textAlign: TextAlign.center),
                     Image(
-                      image: const AssetImage(Assets.imagesArrow),
+                      image: const AssetImage(Assets.imagesArrowPng),
                       width: width * 0.3,
                     ),
                     ListView.builder(
@@ -192,7 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: AppColors.textButtonColor,
                         textAlign: TextAlign.center),
                     Image(
-                      image: const AssetImage(Assets.imagesArrow),
+                      image: const AssetImage(Assets.imagesArrowPng),
                       width: width * 0.3,
                     ),
                     SpaceHeight.getZeroTwo(context),

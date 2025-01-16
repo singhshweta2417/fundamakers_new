@@ -5,6 +5,7 @@ import 'package:fundamakers/main.dart';
 import 'package:fundamakers/res/app_colors.dart';
 import 'package:fundamakers/res/custom_widgets.dart';
 import 'package:fundamakers/res/text_widget.dart';
+import 'package:fundamakers/utils/routes/routes_name.dart';
 import 'package:fundamakers/view_model/premium_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -66,69 +67,89 @@ class _PreviousYearsPaperScreenState extends State<PreviousYearsPaperScreen> {
                 return ListView(
                   shrinkWrap: true,
                   children: [
-                    SizedBox(
-                      height: height * 0.05,
-                      child: textWidget(
-                          text: '  $title',
-                          fontSize: Dimensions.twenty,
-                          fontWeight: FontWeight.w700),
+                    Container(
+                      height: height * 0.06,
+                      width: width * 0.3,
+                      padding: EdgeInsets.symmetric(horizontal: width * 0.3),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          textWidget(
+                              text: title.toString(),
+                              fontSize: Dimensions.eighteen,
+                              fontWeight: FontWeight.w600),
+                          const Image(
+                            image: AssetImage(Assets.imagesArrowPng),
+                          ),
+                        ],
+                      ),
                     ),
                     ListView.builder(
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: previousYearList.length,
                       itemBuilder: (context, index) {
-                        return listContainer(
-                            child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            SizedBox(
-                              height: height * 0.07,
-                              child: const Icon(Icons.download,
-                                  size: 30, color: AppColors.themeGreenColor),
-                            ),
-                            SizedBox(width: width * 0.05),
-                            SizedBox(
-                              width: width * 0.7,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  textWidget(
-                                      text: previousYearList[index]
-                                          .fileName
-                                          .toString(),
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: Dimensions.thirteen),
-                                  textWidget(
-                                      text: previousYearList[index]
-                                          .description
-                                          .toString(),
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: Dimensions.thirteen,
-                                      maxLines: 1),
-                                  SizedBox(
-                                      height: height * 0.03,
-                                      child: textWidget(
-                                          onTap: () async {
-                                            const pdfUrl =
-                                                'https://online.fundamakers.com/content/b9d2b5a165327713960ec0f9117df628.pdf';
-                                            if (await canLaunchUrl(
-                                                Uri.parse(pdfUrl))) {
-                                              await launchUrl(
-                                                  Uri.parse(pdfUrl));
-                                            } else {
-                                              throw 'Could not launch $pdfUrl';
-                                            }
-                                          },
-                                          text: 'download.pdf',
-                                          color: Colors.blueAccent,
-                                          decoration: TextDecoration.underline,
-                                          fontSize: Dimensions.fifteen)),
-                                ],
+                        return GestureDetector(
+                          onTap: (){
+                            const pdfUrl =
+                                'https://online.fundamakers.com/content/b9d2b5a165327713960ec0f9117df628.pdf';
+                            Navigator.pushNamed(context, RoutesName.pDFViewScreen,arguments: {
+                              'urlLink':pdfUrl
+                            });
+                          },
+                          child: listContainer(
+                              child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              SizedBox(
+                                height: height * 0.07,
+                                child: const Icon(Icons.download,
+                                    size: 30, color: AppColors.themeGreenColor),
                               ),
-                            ),
-                          ],
-                        ));
+                              SizedBox(width: width * 0.05),
+                              SizedBox(
+                                width: width * 0.7,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    textWidget(
+                                        text: previousYearList[index]
+                                            .fileName
+                                            .toString(),
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: Dimensions.thirteen),
+                                    textWidget(
+                                        text: previousYearList[index]
+                                            .description
+                                            .toString(),
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: Dimensions.thirteen,
+                                        maxLines: 1),
+                                    SizedBox(
+                                        height: height * 0.03,
+                                        child: textWidget(
+                                            onTap: () async {
+                                              const pdfUrl =
+                                                  'https://online.fundamakers.com/content/b9d2b5a165327713960ec0f9117df628.pdf';
+                                              if (await canLaunchUrl(
+                                                  Uri.parse(pdfUrl))) {
+                                                await launchUrl(
+                                                    Uri.parse(pdfUrl));
+                                              } else {
+                                                throw 'Could not launch $pdfUrl';
+                                              }
+                                            },
+                                            text: 'download.pdf',
+                                            color: Colors.blueAccent,
+                                            decoration: TextDecoration.underline,
+                                            fontSize: Dimensions.fifteen)),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          )),
+                        );
                       },
                     ),
                   ],

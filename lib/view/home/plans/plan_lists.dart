@@ -5,6 +5,7 @@ import 'package:fundamakers/helper/response/status.dart';
 import 'package:fundamakers/main.dart';
 import 'package:fundamakers/res/app_colors.dart';
 import 'package:fundamakers/res/components/app_btn.dart';
+import 'package:fundamakers/res/custom_widgets.dart';
 import 'package:fundamakers/res/text_widget.dart';
 import 'package:fundamakers/utils/routes/routes_name.dart';
 import 'package:fundamakers/view_model/plans_view_model.dart';
@@ -19,6 +20,7 @@ class PlanCourse extends StatefulWidget {
 }
 
 class _PlanCourseState extends State<PlanCourse> {
+
   @override
   void initState() {
     // TODO: implement initState
@@ -39,6 +41,9 @@ class _PlanCourseState extends State<PlanCourse> {
 
   @override
   Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final title = args?['title'];
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -88,132 +93,147 @@ class _PlanCourseState extends State<PlanCourse> {
                 value.plansResponse.data!.data != null &&
                 value.plansResponse.data!.data!.isNotEmpty) {
               final plansListView = value.plansResponse.data!.data!;
-              return ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                scrollDirection: Axis.vertical,
+              return ListView(
                 shrinkWrap: true,
-                itemCount: plansListView.length,
-                itemBuilder: (context, index) {
-                  return InkWell(
-                    onTap: () {
-                      Navigator.pushNamed(
-                          context, RoutesName.myCourseVideoList);
-                      //CourseVideo
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      margin: EdgeInsets.symmetric(
-                          horizontal: width * 0.05, vertical: 20),
-                      height: height * 0.15,
-                      decoration: BoxDecoration(
-                        color: AppColors.themeWhiteColor,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
-                            spreadRadius: 3,
-                            blurRadius: 7,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          SizedBox(
-                            height: height * 0.09,
-                            width: width * (width > 600 ? 0.2 : 0.25),
-                            child: const Image(
-                              image: AssetImage(Assets.imagesCommunity),
-                            ),
-                          ),
-                          SizedBox(
-                            width: width * (width > 600 ? 0.2 : 0.40),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                textWidget(
-                                    text: plansListView[index].name.toString(),
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: Dimensions.twelve),
-                                textWidget(
-                                    text: plansListView[index]
-                                        .shortDescription
-                                        .toString(),
-                                    fontWeight: FontWeight.w300,
-                                    fontSize: Dimensions.thirteen),
-                                Row(
+                children: [
+                  Container(
+                    height: height * 0.06,
+                    width: width * 0.3,
+                    padding: EdgeInsets.symmetric(horizontal: width * 0.3),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        textWidget(
+                            text: title.toString(),
+                            fontSize: Dimensions.eighteen,
+                            fontWeight: FontWeight.w600),
+                        const Image(
+                          image: AssetImage(Assets.imagesArrowPng),
+                        ),
+                      ],
+                    ),
+                  ),
+                  ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: plansListView.length,
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(
+                              context, RoutesName.myCourseVideoList);
+                          //CourseVideo
+                        },
+                        child: listContainer(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              SizedBox(
+                                height: height * 0.07,
+                                width: width * 0.25,
+                                child: const Image(
+                                  image: AssetImage(Assets.imagesCommunity),
+                                ),
+                              ),
+                              SizedBox(
+                                width: width * 0.40,
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    RatingBar.builder(
-                                      ignoreGestures: false,
-                                      initialRating: 5,
-                                      minRating: 0,
-                                      direction: Axis.horizontal,
-                                      allowHalfRating: true,
-                                      itemCount: 5,
-                                      itemSize:
-                                          width * (width > 600 ? 0.012 : 0.04),
-                                      itemBuilder: (context, _) => const Icon(
-                                        Icons.star,
-                                        color: Colors.amber,
-                                      ),
-                                      onRatingUpdate: (double value) {
-                                        // Update logic if needed
-                                      },
+                                    textWidget(
+                                        text: plansListView[index]
+                                            .name
+                                            .toString(),
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: Dimensions.twelve),
+                                    textWidget(
+                                        text: plansListView[index]
+                                            .shortDescription
+                                            .toString(),
+                                        fontWeight: FontWeight.w300,
+                                        fontSize: Dimensions.thirteen),
+                                    Row(
+                                      children: [
+                                        RatingBar.builder(
+                                          ignoreGestures: false,
+                                          initialRating: 5,
+                                          minRating: 0,
+                                          direction: Axis.horizontal,
+                                          allowHalfRating: true,
+                                          itemCount: 5,
+                                          itemSize: width * 0.04,
+                                          itemBuilder: (context, _) =>
+                                              const Icon(
+                                            Icons.star,
+                                            color: Colors.amber,
+                                          ),
+                                          onRatingUpdate: (double value) {
+                                            // Update logic if needed
+                                          },
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
-                              ],
-                            ),
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              SizedBox(height: height * 0.01),
-                              AppBtn(
-                                onTap: () {
-                                  Razorpay razorpay = Razorpay();
-                                  var options = {
-                                    'key': 'rzp_test_1DP5mmOlF5G5ag',
-                                    'amount': 100,
-                                    'name': 'Acme Corp.',
-                                    'description': 'Fine T-Shirt',
-                                    'retry': {'enabled': true, 'max_count': 1},
-                                    'send_sms_hash': true,
-                                    'prefill': {
-                                      'contact': '8888888888',
-                                      'email': 'test@razorpay.com'
-                                    },
-                                    'external': {
-                                      'wallets': ['paytm']
-                                    }
-                                  };
-                                  razorpay.on(Razorpay.EVENT_PAYMENT_ERROR,
-                                      handlePaymentErrorResponse);
-                                  razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS,
-                                      handlePaymentSuccessResponse);
-                                  razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET,
-                                      handleExternalWalletSelected);
-                                  razorpay.open(options);
-                                },
-                                width: width * 0.16,
-                                height: height * 0.035,
-                                title: 'Buy Now',
-                                fontSize: 12,
                               ),
-                              textWidget(
-                                  text:
-                                      '₹${plansListView[index].amount.toString()}',
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: Dimensions.thirteen),
+                              Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  SizedBox(height: height * 0.01),
+                                  AppBtn(
+                                    onTap: () {
+                                      Razorpay razorpay = Razorpay();
+                                      var options = {
+                                        'key': 'rzp_test_1DP5mmOlF5G5ag',
+                                        'amount': 100,
+                                        'name': 'Acme Corp.',
+                                        'description': 'Fine T-Shirt',
+                                        'retry': {
+                                          'enabled': true,
+                                          'max_count': 1
+                                        },
+                                        'send_sms_hash': true,
+                                        'prefill': {
+                                          'contact': '8888888888',
+                                          'email': 'test@razorpay.com'
+                                        },
+                                        'external': {
+                                          'wallets': ['paytm']
+                                        }
+                                      };
+                                      razorpay.on(Razorpay.EVENT_PAYMENT_ERROR,
+                                          handlePaymentErrorResponse);
+                                      razorpay.on(
+                                          Razorpay.EVENT_PAYMENT_SUCCESS,
+                                          handlePaymentSuccessResponse);
+                                      razorpay.on(
+                                          Razorpay.EVENT_EXTERNAL_WALLET,
+                                          handleExternalWalletSelected);
+                                      razorpay.open(options);
+                                    },
+                                    width: width * 0.16,
+                                    height: height * 0.035,
+                                    title: 'Buy Now',
+                                    fontSize: 12,
+                                  ),
+                                  textWidget(
+                                      text:
+                                          '₹${plansListView[index].amount.toString()}',
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: Dimensions.thirteen),
+                                ],
+                              ),
                             ],
                           ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
+                        ),
+                      );
+                    },
+                  ),
+                ],
               );
             } else {
               return Column(

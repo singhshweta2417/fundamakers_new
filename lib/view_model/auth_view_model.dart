@@ -277,7 +277,8 @@ class AuthenticationViewModel with ChangeNotifier {
       dynamic mobileNumber,
       dynamic courseId,
       dynamic subCourseId,
-      dynamic lastName, context) async {
+      dynamic lastName, context) async
+  {
     setRegisterLoading(true);
     Map<String, dynamic> data = {
       "email": email,
@@ -327,4 +328,14 @@ class AuthenticationViewModel with ChangeNotifier {
       }
     }
   }
+
+  void clearErrors() {
+    _errorMessage = null;
+    _verifyMessage = null;
+    _errorNewMessage = null;
+    _verifyNewMessage = null;
+    _regMessage = null;
+    notifyListeners();
+  }
+
 }
