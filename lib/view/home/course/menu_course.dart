@@ -61,13 +61,13 @@ class _MenuCourseState extends State<MenuCourse> {
         builder: (BuildContext context, BoxConstraints constraints) {
           double containerWidth = constraints.maxWidth;
           double containerHeight = constraints.maxHeight;
-          return (subCoursesView == null || subCoursesView.isEmpty)
+          return (subCoursesView == null)
               ? const Center(
                   child: CircularProgressIndicator(
                     color: AppColors.themeGreenColor,
                   ),
                 )
-              : (subCoursesView == [])
+              : (subCoursesView.isEmpty)
                   ? Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

@@ -68,9 +68,7 @@ class _PreviousYearsPaperScreenState extends State<PreviousYearsPaperScreen> {
                   shrinkWrap: true,
                   children: [
                     Container(
-                      height: height * 0.06,
-                      width: width * 0.3,
-                      padding: EdgeInsets.symmetric(horizontal: width * 0.3),
+                      padding: EdgeInsets.symmetric(vertical: height*0.01),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -79,8 +77,9 @@ class _PreviousYearsPaperScreenState extends State<PreviousYearsPaperScreen> {
                               text: title.toString(),
                               fontSize: Dimensions.eighteen,
                               fontWeight: FontWeight.w600),
-                          const Image(
-                            image: AssetImage(Assets.imagesArrowPng),
+                           Image(
+                            width: width * 0.5,
+                            image: const AssetImage(Assets.imagesArrowPng),
                           ),
                         ],
                       ),
@@ -90,16 +89,14 @@ class _PreviousYearsPaperScreenState extends State<PreviousYearsPaperScreen> {
                       shrinkWrap: true,
                       itemCount: previousYearList.length,
                       itemBuilder: (context, index) {
+                        final pdfUrl ='${previousYearList[index].host}${previousYearList[index].filePath}${previousYearList[index].uniqueName}';
                         return GestureDetector(
                           onTap: (){
-                            const pdfUrl =
-                                'https://online.fundamakers.com/content/b9d2b5a165327713960ec0f9117df628.pdf';
                             Navigator.pushNamed(context, RoutesName.pDFViewScreen,arguments: {
                               'urlLink':pdfUrl
                             });
                           },
-                          child: listContainer(
-                              child: Row(
+                          child: listContainer(child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               SizedBox(
@@ -109,29 +106,20 @@ class _PreviousYearsPaperScreenState extends State<PreviousYearsPaperScreen> {
                               ),
                               SizedBox(width: width * 0.05),
                               SizedBox(
-                                width: width * 0.7,
+                                width: width * 0.5,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     textWidget(
                                         text: previousYearList[index]
-                                            .fileName
+                                            .description
                                             .toString(),
                                         fontWeight: FontWeight.w600,
                                         fontSize: Dimensions.thirteen),
-                                    textWidget(
-                                        text: previousYearList[index]
-                                            .description
-                                            .toString(),
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: Dimensions.thirteen,
-                                        maxLines: 1),
                                     SizedBox(
                                         height: height * 0.03,
                                         child: textWidget(
                                             onTap: () async {
-                                              const pdfUrl =
-                                                  'https://online.fundamakers.com/content/b9d2b5a165327713960ec0f9117df628.pdf';
                                               if (await canLaunchUrl(
                                                   Uri.parse(pdfUrl))) {
                                                 await launchUrl(
@@ -147,6 +135,8 @@ class _PreviousYearsPaperScreenState extends State<PreviousYearsPaperScreen> {
                                   ],
                                 ),
                               ),
+                              const Spacer(),
+                              const Icon(Icons.arrow_forward_ios)
                             ],
                           )),
                         );

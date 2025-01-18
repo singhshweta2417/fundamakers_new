@@ -72,10 +72,10 @@ class TestTypeViewModel with ChangeNotifier {
     }
   }
 
-  Future<void> testApi(context) async {
+  Future<void> testApi(dynamic data,context) async {
     setTestModel(ApiResponse.loading());
     try {
-      final value = await _testTypeDetailsRepo.testApi();
+      final value = await _testTypeDetailsRepo.testApi(data);
       setTestModel(ApiResponse.completed(value));
     } catch (error) {
       setTestModel(ApiResponse.error(error.toString()));
@@ -84,4 +84,5 @@ class TestTypeViewModel with ChangeNotifier {
       }
     }
   }
+
 }

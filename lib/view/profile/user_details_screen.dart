@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fundamakers/generated/assets.dart';
 import 'package:fundamakers/helper/response/status.dart';
@@ -12,7 +10,6 @@ import 'package:fundamakers/res/custom_text_field.dart';
 import 'package:fundamakers/res/text_widget.dart';
 import 'package:fundamakers/view_model/course_view_model.dart';
 import 'package:fundamakers/view_model/user_details_view_model.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class UserDetailsScreen extends StatefulWidget {
@@ -75,19 +72,20 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
   TextEditingController lastNameCon = TextEditingController();
   TextEditingController emailCon = TextEditingController();
   TextEditingController whatsAppNumberCon = TextEditingController();
-  File? _image;
-  final picker = ImagePicker();
-  String? base64Image;
 
-  Future<void> _getImage(ImageSource source) async {
-    final pickedFile = await picker.pickImage(source: source);
-    if (pickedFile != null) {
-      setState(() {
-        _image = File(pickedFile.path);
-      });
-      base64Image = base64Encode(_image!.readAsBytesSync());
-    }
-  }
+  // File? _image;
+  // final picker = ImagePicker();
+  // String? base64Image;
+  //
+  // Future<void> _getImage(ImageSource source) async {
+  //   final pickedFile = await picker.pickImage(source: source);
+  //   if (pickedFile != null) {
+  //     setState(() {
+  //       _image = File(pickedFile.path);
+  //     });
+  //     base64Image = base64Encode(_image!.readAsBytesSync());
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -119,43 +117,13 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SpaceHeight.getZeroTwo(context),
-            Center(
-              child: Stack(
-                children: [
-                  _image != null
-                      ? CircleAvatar(
-                          radius: 70,
-                          backgroundImage: FileImage(_image!),
-                        )
-                      : const CircleAvatar(
-                          backgroundImage: AssetImage(Assets.imagesProfile),
-                          radius: 70,
-                        ),
-                  Positioned(
-                      right: 0,
-                      bottom: 0,
-                      child: InkWell(
-                        onTap: () {
-                          _settingModalBottomSheet(context);
-                        },
-                        child: Container(
-                            height: 45,
-                            width: 45,
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                                gradient: const LinearGradient(
-                                  colors: [
-                                    AppColors.gradientFirstColor,
-                                    AppColors.gradientSecondColor
-                                  ],
-                                ),
-                                borderRadius: BorderRadius.circular(30)),
-                            child: const Icon(
-                              Icons.camera_alt_outlined,
-                              color: Colors.white,
-                            )),
-                      ))
-                ],
+            Container(
+              height: height*0.15,
+              width: width*0.3,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: AppColors.themeGreenColor,width: 3),
+                image: const DecorationImage(image: AssetImage(Assets.imagesAvatar))
               ),
             ),
             SpaceHeight.getZeroFive(context),
@@ -221,7 +189,6 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                             if (newValue != null) {
                               setState(() {
                                 dropdownValue = newValue;
-                                // Find the selected course and update subCoursesView
                                 CourseData selectedCourse =
                                     coursesView.firstWhere(
                                   (element) => element.name == dropdownValue,
@@ -288,6 +255,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                 fieldRadius: BorderRadius.circular(3)),
             SpaceHeight.getZeroTwo(context),
             customTextFormField(
+              readOnly: true,
                 controller: whatsAppNumberCon,
                 keyboardType: TextInputType.phone,
                 hintText: 'WhatsApp Number',
@@ -315,78 +283,78 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
     );
   }
 
-  void _settingModalBottomSheet(context) {
-    final heights = MediaQuery.of(context).size.height;
-    final widths = MediaQuery.of(context).size.width;
-    showModalBottomSheet(
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(15), topRight: Radius.circular(15)),
-        ),
-        context: context,
-        builder: (BuildContext bc) {
-          return SizedBox(
-            height: heights / 7,
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(
-                  widths / 12, 0, widths / 12, heights / 60),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      _getImage(ImageSource.camera);
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      height: heights / 20,
-                      width: widths / 2.7,
-                      decoration: BoxDecoration(
-                          // color: Colors.blue,
-                          gradient: const LinearGradient(
-                            colors: [
-                              AppColors.gradientFirstColor,
-                              AppColors.gradientSecondColor
-                            ],
-                          ),
-                          border: Border.all(
-                              color: AppColors.themeWhiteColor, width: 2),
-                          borderRadius: BorderRadius.circular(10)),
-                      child: const Center(
-                          child: Text(
-                        'Camera',
-                        style: TextStyle(color: AppColors.themeWhiteColor),
-                      )),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      _getImage(ImageSource.gallery);
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      height: heights / 20,
-                      width: widths / 2.7,
-                      decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [
-                              AppColors.gradientFirstColor,
-                              AppColors.gradientSecondColor
-                            ],
-                          ),
-                          borderRadius: BorderRadius.circular(10)),
-                      child: const Center(
-                          child: Text(
-                        'Gallery',
-                        style: TextStyle(color: Colors.white),
-                      )),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        });
-  }
+  // void _settingModalBottomSheet(context) {
+  //   final heights = MediaQuery.of(context).size.height;
+  //   final widths = MediaQuery.of(context).size.width;
+  //   showModalBottomSheet(
+  //       shape: const RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.only(
+  //             topLeft: Radius.circular(15), topRight: Radius.circular(15)),
+  //       ),
+  //       context: context,
+  //       builder: (BuildContext bc) {
+  //         return SizedBox(
+  //           height: heights / 7,
+  //           child: Padding(
+  //             padding: EdgeInsets.fromLTRB(
+  //                 widths / 12, 0, widths / 12, heights / 60),
+  //             child: Row(
+  //               crossAxisAlignment: CrossAxisAlignment.center,
+  //               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //               children: [
+  //                 InkWell(
+  //                   onTap: () {
+  //                     _getImage(ImageSource.camera);
+  //                     Navigator.pop(context);
+  //                   },
+  //                   child: Container(
+  //                     height: heights / 20,
+  //                     width: widths / 2.7,
+  //                     decoration: BoxDecoration(
+  //                         // color: Colors.blue,
+  //                         gradient: const LinearGradient(
+  //                           colors: [
+  //                             AppColors.gradientFirstColor,
+  //                             AppColors.gradientSecondColor
+  //                           ],
+  //                         ),
+  //                         border: Border.all(
+  //                             color: AppColors.themeWhiteColor, width: 2),
+  //                         borderRadius: BorderRadius.circular(10)),
+  //                     child: const Center(
+  //                         child: Text(
+  //                       'Camera',
+  //                       style: TextStyle(color: AppColors.themeWhiteColor),
+  //                     )),
+  //                   ),
+  //                 ),
+  //                 InkWell(
+  //                   onTap: () {
+  //                     _getImage(ImageSource.gallery);
+  //                     Navigator.pop(context);
+  //                   },
+  //                   child: Container(
+  //                     height: heights / 20,
+  //                     width: widths / 2.7,
+  //                     decoration: BoxDecoration(
+  //                         gradient: const LinearGradient(
+  //                           colors: [
+  //                             AppColors.gradientFirstColor,
+  //                             AppColors.gradientSecondColor
+  //                           ],
+  //                         ),
+  //                         borderRadius: BorderRadius.circular(10)),
+  //                     child: const Center(
+  //                         child: Text(
+  //                       'Gallery',
+  //                       style: TextStyle(color: Colors.white),
+  //                     )),
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //         );
+  //       });
+  // }
 }

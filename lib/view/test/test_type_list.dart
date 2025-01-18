@@ -84,10 +84,10 @@ class _TestTypeListScreenState extends State<TestTypeListScreen> {
                             onTap: () {
                               if (testListView[index].id == 12) {
                                 Navigator.pushNamed(
-                                    context, RoutesName.subListMenu,arguments: {'title':testListView[index].name});
+                                    context, RoutesName.subListMenu,arguments: {'title':testListView[index].name,'testId':12});
                               } else {
                                 Navigator.pushNamed(
-                                    context, RoutesName.mainTestList,arguments: {'title':testListView[index].name});
+                                    context, RoutesName.mainTestList,arguments: {'title':testListView[index].name,'testId':testListView[index].id});
                               }
                             },
                             child: listContainer(

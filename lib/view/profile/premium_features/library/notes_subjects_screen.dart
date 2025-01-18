@@ -98,7 +98,10 @@ class _NotesAndSubjectsScreenState extends State<NotesAndSubjectsScreen> {
                         return InkWell(
                           onTap: () {
                             Navigator.pushNamed(
-                                context, RoutesName.classHandOutsScreen);
+                                context, RoutesName.notesPdfScreen, arguments: {
+                              'subjectId': subjectView[index].id,
+                              'title': subjectView[index].name
+                            });
                           },
                           child: Container(
                             alignment: Alignment.center,
@@ -137,7 +140,7 @@ class _NotesAndSubjectsScreenState extends State<NotesAndSubjectsScreen> {
                                   width: width * 0.45,
                                   child: Column(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
+                                        MainAxisAlignment.spaceBetween,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
@@ -146,10 +149,6 @@ class _NotesAndSubjectsScreenState extends State<NotesAndSubjectsScreen> {
                                               .name
                                               .toString(),
                                           fontWeight: FontWeight.w600,
-                                          fontSize: Dimensions.thirteen),
-                                      textWidget(
-                                          text: 'Ques: 10/10',
-                                          fontWeight: FontWeight.w500,
                                           fontSize: Dimensions.thirteen),
                                       textWidget(
                                           text: subjectView[index]

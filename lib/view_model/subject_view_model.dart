@@ -5,6 +5,7 @@ import 'package:fundamakers/repo/subject_repo.dart';
 
 class SubjectViewModel with ChangeNotifier {
   final _subjectRepo = SubjectRepository();
+  ///Subject
   ApiResponse<SubjectModel> _subjectResponse = ApiResponse.loading();
 
   ApiResponse<SubjectModel> get subjectResponse => _subjectResponse;
@@ -28,4 +29,5 @@ class SubjectViewModel with ChangeNotifier {
       }
     }
   }
+
 }

@@ -29,4 +29,6 @@ class RoutesName {
   static const gkZoneScreen = '/gk_zone_screen';
   static const libraryScreen = '/library_screen';
   static const policyScreen = '/policy_screen';
+  static const gkPdfScreen = '/gk_pdf_screen';
+  static const notesPdfScreen = '/notesPdfScreen';
 }

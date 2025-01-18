@@ -92,10 +92,9 @@ class _BSchoolInfoScreenState extends State<BSchoolInfoScreen> {
                       shrinkWrap: true,
                       itemCount: bSchoolInfoList.length,
                       itemBuilder: (context, index) {
+                        final pdfUrl ='${bSchoolInfoList[index].host}${bSchoolInfoList[index].filePath}${bSchoolInfoList[index].uniqueName}';
                         return GestureDetector(
                           onTap: (){
-                            const pdfUrl =
-                                'https://online.fundamakers.com/content/b9d2b5a165327713960ec0f9117df628.pdf';
                             Navigator.pushNamed(context, RoutesName.pDFViewScreen,arguments: {
                               'urlLink':pdfUrl
                             });
@@ -111,29 +110,20 @@ class _BSchoolInfoScreenState extends State<BSchoolInfoScreen> {
                               ),
                               SizedBox(width: width * 0.05),
                               SizedBox(
-                                width: width*0.7,
+                                width: width*0.5,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     textWidget(
                                         text: bSchoolInfoList[index]
-                                            .fileName
-                                            .toString(),
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: Dimensions.thirteen),
-                                    textWidget(
-                                        text: bSchoolInfoList[index]
                                             .description
                                             .toString(),
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: Dimensions.thirteen,
-                                        maxLines: 1),
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: Dimensions.thirteen,maxLines: 3),
                                     SizedBox(
                                       height: height*0.03,
                                       child:  textWidget(
                                           onTap:() async {
-                                            const pdfUrl =
-                                                'https://online.fundamakers.com/content/b9d2b5a165327713960ec0f9117df628.pdf';
                                             if (await canLaunchUrl(
                                                 Uri.parse(pdfUrl))) {
                                               await launchUrl(Uri.parse(pdfUrl));
@@ -150,6 +140,8 @@ class _BSchoolInfoScreenState extends State<BSchoolInfoScreen> {
                                   ],
                                 ),
                               ),
+                              const Spacer(),
+                              const Icon(Icons.arrow_forward_ios_sharp)
                             ],
                           )),
                         );

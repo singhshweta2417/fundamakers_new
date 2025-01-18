@@ -21,8 +21,11 @@ class _TestListScreenState extends State<TestListScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      final args =
+      ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+      final testId = args?['testId'];
       final testView = Provider.of<TestTypeViewModel>(context, listen: false);
-      testView.testApi(context);
+      testView.testApi(testId,context);
     });
   }
 
@@ -64,9 +67,7 @@ class _TestListScreenState extends State<TestListScreen> {
                   shrinkWrap: true,
                   children: [
                     Container(
-                      height: height * 0.06,
-                      width: width * 0.3,
-                      padding: EdgeInsets.symmetric(horizontal: width * 0.3),
+                      padding: EdgeInsets.symmetric(vertical: height*0.02),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -75,8 +76,9 @@ class _TestListScreenState extends State<TestListScreen> {
                               text: title.toString(),
                               fontSize: Dimensions.eighteen,
                               fontWeight: FontWeight.w600),
-                          const Image(
-                            image: AssetImage(Assets.imagesArrowPng),
+                           Image(
+                            width: width * 0.5,
+                            image: const AssetImage(Assets.imagesArrowPng),
                           ),
                         ],
                       ),
@@ -103,8 +105,9 @@ class _TestListScreenState extends State<TestListScreen> {
                                     image: AssetImage(Assets.imagesCommunity),
                                   ),
                                 ),
+                                SizedBox(width: width*0.05),
                                 SizedBox(
-                                  width: width * 0.45,
+                                  width: width * 0.5,
                                   child: Column(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,
@@ -116,22 +119,22 @@ class _TestListScreenState extends State<TestListScreen> {
                                               .name
                                               .toString(),
                                           fontWeight: FontWeight.w600,
-                                          fontSize: Dimensions.thirteen),
+                                          fontSize: Dimensions.thirteen,maxLines: 2),
                                       textWidget(
                                           text: testMainList[index]
                                               .description
                                               .toString(),
                                           fontWeight: FontWeight.w500,
-                                          fontSize: Dimensions.twelve),
-                                      textWidget(
-                                          text: testMainList[index]
-                                              .hasWindowTimeLimit
-                                              .toString(),
-                                          fontWeight: FontWeight.w300,
-                                          fontSize: Dimensions.twelve),
+                                          fontSize: Dimensions.twelve,maxLines: 2),
+                                      testMainList[index]
+                                          .testTypeId==18?textWidget(
+                                          text: 'From Date:${testMainList[index].fromDate.toString()} to ${testMainList[index].toDate.toString()}',
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: Dimensions.twelve,maxLines: 2):Container(),
                                     ],
                                   ),
                                 ),
+                                const Spacer(),
                                 const Icon(Icons.arrow_forward_ios),
                               ],
                             )));

@@ -6,6 +6,7 @@ import 'package:fundamakers/main.dart';
 import 'package:fundamakers/res/app_colors.dart';
 import 'package:fundamakers/res/custom_widgets.dart';
 import 'package:fundamakers/res/text_widget.dart';
+import 'package:fundamakers/utils/routes/routes_name.dart';
 import 'package:fundamakers/view_model/premium_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -91,14 +92,10 @@ class _PracticeBookScreenState extends State<PracticeBookScreen> {
                         final pdfLink =
                             '${practiceBookList[index].host}${practiceBookList[index].filePath}${practiceBookList[index].fileName}';
                         return InkWell(
-                            onTap: () async {
-                              // const pdfUrl =
-                              //     'https://online.fundamakers.com/content/b9d2b5a165327713960ec0f9117df628.pdf';
-                              if (await canLaunchUrl(Uri.parse(pdfLink))) {
-                                await launchUrl(Uri.parse(pdfLink));
-                              } else {
-                                throw 'Could not launch $pdfLink';
-                              }
+                            onTap: () {
+                              Navigator.pushNamed(
+                                  context, RoutesName.pDFViewScreen,
+                                  arguments: {'urlLink': pdfLink});
                             },
                             child: listContainer(
                                 child: Row(
@@ -126,12 +123,23 @@ class _PracticeBookScreenState extends State<PracticeBookScreen> {
                                               .toString(),
                                           fontWeight: FontWeight.w600,
                                           fontSize: Dimensions.thirteen),
-                                      textWidget(
-                                          text: practiceBookList[index]
-                                              .fileName
-                                              .toString(),
-                                          fontWeight: FontWeight.w300,
-                                          fontSize: Dimensions.twelve),
+                                      SizedBox(
+                                          height: height * 0.03,
+                                          child: textWidget(
+                                              onTap: () async {
+                                                if (await canLaunchUrl(
+                                                    Uri.parse(pdfLink))) {
+                                                  await launchUrl(
+                                                      Uri.parse(pdfLink));
+                                                } else {
+                                                  throw 'Could not launch $pdfLink';
+                                                }
+                                              },
+                                              text: 'download.pdf',
+                                              color: Colors.blueAccent,
+                                              decoration:
+                                                  TextDecoration.underline,
+                                              fontSize: Dimensions.fifteen)),
                                       Row(
                                         children: [
                                           RatingBar.builder(
@@ -142,7 +150,7 @@ class _PracticeBookScreenState extends State<PracticeBookScreen> {
                                             direction: Axis.horizontal,
                                             allowHalfRating: true,
                                             itemCount: 5,
-                                            itemSize: 23.0,
+                                            itemSize: 20.0,
                                             itemBuilder: (context, _) =>
                                                 const Icon(
                                               Icons.star,

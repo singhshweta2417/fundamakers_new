@@ -16,11 +16,13 @@ import 'package:fundamakers/view/profile/my_activity/liked_posts.dart';
 import 'package:fundamakers/view/profile/online_classes/online_classes_screen.dart';
 import 'package:fundamakers/view/profile/online_test_result.dart';
 import 'package:fundamakers/view/profile/order_history.dart';
+import 'package:fundamakers/view/profile/premium_features/gk_zone/gk_screen.dart';
 import 'package:fundamakers/view/profile/premium_features/gk_zone/gk_zone.dart';
 import 'package:fundamakers/view/profile/premium_features/library/b_school_info_screen.dart';
 import 'package:fundamakers/view/profile/premium_features/library/class_handouts_subject/class_handouts_screen.dart';
 import 'package:fundamakers/view/profile/premium_features/library/class_handouts_subject/class_handouts_subjects.dart';
 import 'package:fundamakers/view/profile/premium_features/library/library_screen.dart';
+import 'package:fundamakers/view/profile/premium_features/library/notes_pdf_screen.dart';
 import 'package:fundamakers/view/profile/premium_features/library/notes_subjects_screen.dart';
 import 'package:fundamakers/view/profile/premium_features/library/previous_years_papers.dart';
 import 'package:fundamakers/view/profile/premium_features/practice_book/practice_book.dart';
@@ -94,6 +96,10 @@ class Routers {
         return (context) => const LibraryScreen();
       case RoutesName.policyScreen:
         return (context) => const PolicyScreen();
+      case RoutesName.gkPdfScreen:
+        return (context) => const GkPdfScreen();
+      case RoutesName.notesPdfScreen:
+        return (context) => const NotesPdfScreen();
       default:
         return (context) => const Scaffold(
               body: Center(

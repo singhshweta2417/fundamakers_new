@@ -3,6 +3,7 @@ import 'package:fundamakers/generated/assets.dart';
 import 'package:fundamakers/helper/response/status.dart';
 import 'package:fundamakers/main.dart';
 import 'package:fundamakers/res/app_colors.dart';
+import 'package:fundamakers/res/custom_widgets.dart';
 import 'package:fundamakers/res/text_widget.dart';
 import 'package:fundamakers/utils/routes/routes_name.dart';
 import 'package:fundamakers/view_model/subject_view_model.dart';
@@ -97,6 +98,7 @@ class _ClassHandOutsSubjectsScreenState
                       shrinkWrap: true,
                       itemCount: subjectView.length,
                       itemBuilder: (context, index) {
+
                         return InkWell(
                           onTap: () {
                             Navigator.pushNamed(
@@ -104,24 +106,7 @@ class _ClassHandOutsSubjectsScreenState
                                   'title':subjectView[index].name.toString()
                             });
                           },
-                          child: Container(
-                            alignment: Alignment.center,
-                            padding: EdgeInsets.symmetric(
-                                horizontal: width * 0.03, vertical: height * 0.02),
-                            margin: EdgeInsets.symmetric(
-                                horizontal: width * 0.05, vertical: height * 0.01),
-                            decoration: BoxDecoration(
-                              color: AppColors.themeWhiteColor,
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.2),
-                                  spreadRadius: 3,
-                                  blurRadius: 7,
-                                  offset: const Offset(0, 2),
-                                ),
-                              ],
-                            ),
+                          child: listContainer(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
@@ -145,10 +130,7 @@ class _ClassHandOutsSubjectsScreenState
                                           text: subjectView[index].name.toString(),
                                           fontWeight: FontWeight.w600,
                                           fontSize: Dimensions.thirteen),
-                                      textWidget(
-                                          text: 'Ques: 10/10',
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: Dimensions.thirteen),
+                                      SizedBox(height: height*0.01,),
                                       textWidget(
                                           text: subjectView[index]
                                               .description

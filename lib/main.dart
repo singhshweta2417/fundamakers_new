@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:fundamakers/view_model/concepts_view_model.dart';
 import 'package:fundamakers/view_model/course_view_model.dart';
 import 'package:fundamakers/view_model/online_classes_view_model.dart';
 import 'package:fundamakers/view_model/plans_view_model.dart';
@@ -57,6 +58,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => UserDetailViewModel()),
         ChangeNotifierProvider(create: (context) => VideoViewModel()),
         ChangeNotifierProvider(create: (context) => OnlineClassesViewModel()),
+        ChangeNotifierProvider(create: (context) => ConceptsViewModel()),
       ],
       child: Builder(
         builder: (context) {

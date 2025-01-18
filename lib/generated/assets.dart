@@ -6,6 +6,7 @@ class Assets {
   static const String iconsDropIcon = 'assets/icons/drop_icon.png';
   static const String imagesArrowPng = 'assets/images/arrow_png.png';
   static const String imagesAskQuestion = 'assets/images/askQuestion.png';
+  static const String imagesAvatar = 'assets/images/avatar.png';
   static const String imagesBook = 'assets/images/book.png';
   static const String imagesBrowse = 'assets/images/browse.png';
   static const String imagesCat = 'assets/images/cat.jpeg';

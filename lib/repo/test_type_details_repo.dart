@@ -38,10 +38,10 @@ class TestTypeDetailsRepository {
   }
 
   ///TEST
-  Future<TestModel> testApi() async {
+  Future<TestModel> testApi(dynamic data) async {
     try {
       dynamic response =
-          await _apiServices.getGetApiBearerResponse(AppUrls.testsUrls);
+          await _apiServices.getGetApiBearerResponse('${AppUrls.testsUrls}testType=$data');
       return TestModel.fromJson(response);
     } catch (e) {
       if (kDebugMode) {

@@ -11,7 +11,7 @@ class AppUrls{
   static const String plansUrls = '$baseUrl/api/plans?';
   static const String testTypeUrls = '$baseUrl/api/test-types';
   static const String subjectsUrls = '$baseUrl/api/subjects';
-  static const String testsUrls = '$baseUrl/api/tests';
+  static const String testsUrls = '$baseUrl/api/tests?';
   static const String gkUrls = '$baseUrl/api/general-knowledge';
   static const String videoLecturesUrls = '$baseUrl/api/video-lectures';
   static const String classHandoutsUrls = '$baseUrl/api/class-handout';
@@ -19,5 +19,6 @@ class AppUrls{
   static const String previousYearPaperUrls = '$baseUrl/api/previous-year-paper';
   static const String practiceBooksUrls = '$baseUrl/api/practice-books';
   static const String onlineClassesUrls = '$baseUrl/api/online-classes';
+  static const String conceptsReads = '$baseUrl/api/concepts-reads?';
 
 }

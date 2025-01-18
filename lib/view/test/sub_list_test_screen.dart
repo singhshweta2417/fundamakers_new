@@ -31,6 +31,7 @@ class _SubListTestMenuState extends State<SubListTestMenu> {
     final args =
     ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     final title = args?['title'];
+    final testId = args?['testId'];
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -89,7 +90,8 @@ class _SubListTestMenuState extends State<SubListTestMenu> {
                         return InkWell(
                             onTap: () {
                               Navigator.pushNamed(context, RoutesName.mainTestList,arguments: {
-                                'title':subjectView[index].name
+                                'title':subjectView[index].name,
+                                'testId':testId.toString()
                               });
                             },
                             child: listContainer(

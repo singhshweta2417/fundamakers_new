@@ -6,25 +6,29 @@ import 'package:fundamakers/res/app_colors.dart';
 import 'package:fundamakers/res/custom_widgets.dart';
 import 'package:fundamakers/res/text_widget.dart';
 import 'package:fundamakers/utils/routes/routes_name.dart';
-import 'package:fundamakers/view_model/premium_view_model.dart';
+import 'package:fundamakers/view_model/concepts_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ClassHandOutsScreen extends StatefulWidget {
-  const ClassHandOutsScreen({Key? key}) : super(key: key);
+class NotesPdfScreen extends StatefulWidget {
+  const NotesPdfScreen({super.key});
 
   @override
-  State<ClassHandOutsScreen> createState() => _ClassHandOutsScreenState();
+  State<NotesPdfScreen> createState() => _NotesPdfScreenState();
 }
 
-class _ClassHandOutsScreenState extends State<ClassHandOutsScreen> {
+class _NotesPdfScreenState extends State<NotesPdfScreen> {
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final classHangOutsView =
-          Provider.of<PremiumViewModel>(context, listen: false);
-      classHangOutsView.classHandOutApi(context);
+      final args =
+      ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+      final subjectId = args?['subjectId'];
+      final notesEbook =
+      Provider.of<ConceptsViewModel>(context, listen: false);
+      notesEbook.notesEbookApi(subjectId,context);
     });
   }
 
@@ -51,18 +55,17 @@ class _ClassHandOutsScreenState extends State<ClassHandOutsScreen> {
             icon: const Icon(Icons.arrow_back_ios),
           ),
         ),
-        body: Consumer<PremiumViewModel>(builder: (context, value, _) {
-          switch (value.classHandoutsResponse.success) {
+        body: Consumer<ConceptsViewModel>(builder: (context, value, _) {
+          switch (value.conceptsResponse.success) {
             case Success.LOADING:
               return circularProgressIndicator();
             case Success.ERROR:
               return noDataAvailable();
             case Success.COMPLETED:
-              if (value.classHandoutsResponse.data != null &&
-                  value.classHandoutsResponse.data!.data != null &&
-                  value.classHandoutsResponse.data!.data!.isNotEmpty) {
-                final classHangOutsList =
-                    value.classHandoutsResponse.data!.data!;
+              if (value.conceptsResponse.data != null &&
+                  value.conceptsResponse.data!.data != null &&
+                  value.conceptsResponse.data!.data!.isNotEmpty) {
+                final conceptsList = value.conceptsResponse.data!.data!;
                 return ListView(
                   shrinkWrap: true,
                   children: [
@@ -85,13 +88,11 @@ class _ClassHandOutsScreenState extends State<ClassHandOutsScreen> {
                       ),
                     ),
                     ListView.builder(
-                      physics: const BouncingScrollPhysics(),
-                      scrollDirection: Axis.vertical,
+                      physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount: classHangOutsList.length,
+                      itemCount: conceptsList.length,
                       itemBuilder: (context, index) {
-                        final pdfUrl ='${classHangOutsList[index].host}${classHangOutsList[index].filePath}${classHangOutsList[index].uniqueName}';
-
+                        final pdfUrl ='${conceptsList[index].host}${conceptsList[index].filePath}${conceptsList[index].uniqueName}';
                         return GestureDetector(
                           onTap: (){
                             Navigator.pushNamed(context, RoutesName.pDFViewScreen,arguments: {
@@ -101,47 +102,48 @@ class _ClassHandOutsScreenState extends State<ClassHandOutsScreen> {
                           child: listContainer(
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              SizedBox(
-                                  height: height * 0.07,
-                                  child: const Icon(Icons.download,
-                                        size: 30, color: AppColors.themeGreenColor),
-                                  ),
-                              SizedBox(width: width*0.05),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   SizedBox(
-                                    width: width*0.5,
-                                    child: textWidget(
-                                        text: classHangOutsList[index]
-                                            .description
-                                            .toString(),
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: Dimensions.thirteen,maxLines: 2),
+                                    height: height * 0.07,
+                                    child: const Icon(Icons.download,
+                                        size: 30, color: AppColors.themeGreenColor),
                                   ),
+                                  SizedBox(width: width * 0.05),
                                   SizedBox(
-                                      height: height * 0.03,
-                                      child: textWidget(
-                                          onTap: () async {
-                                            if (await canLaunchUrl(
-                                                Uri.parse(pdfUrl))) {
-                                              await launchUrl(
-                                                  Uri.parse(pdfUrl));
-                                            } else {
-                                              throw 'Could not launch $pdfUrl';
-                                            }
-                                          },
-                                          text: 'download.pdf',
-                                          color: Colors.blueAccent,
-                                          decoration: TextDecoration.underline,
-                                          fontSize: Dimensions.fifteen)),
+                                    width: width*0.5,
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        textWidget(
+                                            text: conceptsList[index]
+                                                .description
+                                                .toString(),
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: Dimensions.thirteen,maxLines: 3),
+                                        SizedBox(
+                                            height: height*0.03,
+                                            child:  textWidget(
+                                                onTap:() async {
+                                                  if (await canLaunchUrl(
+                                                      Uri.parse(pdfUrl))) {
+                                                    await launchUrl(Uri.parse(pdfUrl));
+                                                  } else {
+                                                    throw 'Could not launch $pdfUrl';
+                                                  }
+                                                },
+                                                text: 'download.pdf',
+                                                color: Colors.blueAccent,
+                                                decoration: TextDecoration.underline,
+                                                fontSize: Dimensions.fifteen)
+                                        ),
+
+                                      ],
+                                    ),
+                                  ),
+                                  const Spacer(),
+                                  const Icon(Icons.arrow_forward_ios_sharp)
                                 ],
-                              ),
-                              const Spacer(),
-                              const Icon(Icons.arrow_forward_ios_sharp)
-                            ],
-                          )),
+                              )),
                         );
                       },
                     ),
